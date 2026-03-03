@@ -2,7 +2,6 @@ import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-
 const sections = ["home","about","timeline","problems","rules"];
 
 function Navbar() {
@@ -13,12 +12,12 @@ function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  /* ================= SCROLL SHRINK EFFECT ================= */
+  /* ================= SCROLL EFFECT ================= */
   useEffect(() => {
 
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
-      setMenuOpen(false); // ✅ auto close mobile menu while scrolling
+      setMenuOpen(false);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -34,9 +33,8 @@ function Navbar() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting)
             setActive(entry.target.id);
-          }
         });
       },
       { threshold: 0.6 }
@@ -51,22 +49,19 @@ function Navbar() {
 
   }, []);
 
-  /* ================= SMOOTH SCROLL ================= */
+  /* ================= SCROLL ================= */
   const scrollToSection = (id) => {
 
-    setMenuOpen(false); // ✅ close mobile menu
+    setMenuOpen(false);
 
     if (location.pathname !== "/") {
       window.location.href = `/#${id}`;
       return;
     }
 
-    const section = document.getElementById(id);
-
-    section?.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
+    document
+      .getElementById(id)
+      ?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -84,27 +79,24 @@ function Navbar() {
       <div className="
       max-w-7xl mx-auto
       flex justify-between items-center
-      px-6 md:px-10
-      relative">
+      px-6 md:px-10">
 
-        {/* ================= LOGO ================= */}
+        {/* LOGO */}
         <h1
           onClick={() => scrollToSection("home")}
           className="
           text-xl md:text-2xl
-          font-bold
-          text-indigo-600
-          cursor-pointer
-          tracking-wide"
+          font-bold text-indigo-600
+          cursor-pointer tracking-wide"
         >
           IDEATHON 2026
         </h1>
 
-        {/* ================= DESKTOP NAV ================= */}
+        {/* ================= DESKTOP ================= */}
         <div className="
         hidden md:flex
         items-center gap-8 font-medium">
-    
+
           {sections.map((sec) => (
 
             <span
@@ -130,8 +122,18 @@ function Navbar() {
               )}
 
             </span>
+
           ))}
 
+          {/* ✅ STUDENT PORTAL */}
+          <Link
+            to="/student/login"
+            className="hover:text-indigo-600"
+          >
+            Student Login
+          </Link>
+
+          {/* STAFF */}
           <Link
             to="/staff-login"
             className="hover:text-indigo-600"
@@ -139,6 +141,7 @@ function Navbar() {
             Staff
           </Link>
 
+          {/* REGISTER */}
           <Link
             to="/register"
             className="
@@ -152,8 +155,7 @@ function Navbar() {
 
         </div>
 
-        {/* ================= MOBILE TOGGLE ================= */}
-       
+        {/* MOBILE BUTTON */}
         <button
           className="md:hidden text-3xl"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -163,40 +165,45 @@ function Navbar() {
 
       </div>
 
-
       {/* ================= MOBILE MENU ================= */}
       <AnimatePresence>
-         
+
         {menuOpen && (
 
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            initial={{ opacity:0,y:-20 }}
+            animate={{ opacity:1,y:0 }}
+            exit={{ opacity:0,y:-20 }}
             className="
             md:hidden
             bg-white/95 backdrop-blur-xl
-            shadow-lg
-            flex flex-col
-            text-center
-            gap-6 py-6"
+            shadow-lg flex flex-col
+            text-center gap-6 py-6"
           >
 
-            {sections.map((sec) => (
-
+            {sections.map((sec)=>(
               <span
                 key={sec}
-                onClick={() => scrollToSection(sec)}
+                onClick={()=>scrollToSection(sec)}
                 className="
                 text-lg font-medium
                 text-gray-700
                 hover:text-indigo-600"
               >
-                {sec.charAt(0).toUpperCase() + sec.slice(1)}
+                {sec.charAt(0).toUpperCase()+sec.slice(1)}
               </span>
-
             ))}
 
+            {/* TEAM */}
+            <Link
+              to="/student/login"
+              onClick={()=>setMenuOpen(false)}
+              className="text-lg"
+            >
+              Student Login
+            </Link>
+
+            {/* STAFF */}
             <Link
               to="/staff-login"
               onClick={()=>setMenuOpen(false)}
@@ -205,14 +212,13 @@ function Navbar() {
               Staff
             </Link>
 
+            {/* REGISTER */}
             <Link
               to="/register"
               onClick={()=>setMenuOpen(false)}
               className="
-              mx-auto
-              px-6 py-3
-              rounded-lg
-              bg-indigo-600
+              mx-auto px-6 py-3
+              rounded-lg bg-indigo-600
               text-white"
             >
               Register

@@ -1,18 +1,31 @@
 const mongoose = require("mongoose");
 
-const memberSchema = new mongoose.Schema({
+/* ================= LEADER ================= */
+
+const leaderSchema = new mongoose.Schema({
   name: { type: String, required: true },
   regNo: { type: String, required: true },
   email: { type: String, required: true },
-  phone: { type: String, required: true }
+  phone: { type: String, required: true },
+  password: { type: String, required: true }
 }, { _id: false });
+
+/* ================= MEMBER ================= */
+
+const memberSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  regNo: { type: String, required: true },
+  email: { type: String, required: true }
+}, { _id: false });
+
+/* ================= TEAM ================= */
 
 const TeamSchema = new mongoose.Schema({
 
   teamName: { type: String, required: true },
 
   leader: {
-    type: memberSchema,
+    type: leaderSchema,
     required: true
   },
 
@@ -32,10 +45,7 @@ const TeamSchema = new mongoose.Schema({
   domain: String,
   problemTitle: String,
 
-  abstract: {
-    type: String,
-    required: true
-  },
+  abstract: { type: String, required: true },
 
   status: {
     type: String,
@@ -45,4 +55,6 @@ const TeamSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-module.exports = mongoose.model("Team", TeamSchema);
+module.exports =
+  mongoose.models.Team ||
+  mongoose.model("Team", TeamSchema);

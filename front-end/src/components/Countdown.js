@@ -7,7 +7,7 @@ export default function Countdown() {
   useEffect(() => {
 
     const eventDate =
-      new Date("April 5, 2026 09:00:00").getTime();
+      new Date("April 1, 2026 09:00:00").getTime();
 
     const timer = setInterval(() => {
 

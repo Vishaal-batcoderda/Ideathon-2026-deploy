@@ -5,14 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { motion } from "framer-motion";
 import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 function Register() {
 
   const navigate = useNavigate();
   const problemRef = useRef(null);
   const abstractRef = useRef(null);
-
-  /* ================= DOMAIN DATA ================= */
 
   const domains = [
     {
@@ -62,9 +61,10 @@ function Register() {
     }
   ];
 
-  /* ================= STATES ================= */
+  const [members, setMembers] = useState([
+    { name: "", regNo: "", email: "" }
+  ]);
 
-  const [members, setMembers] = useState([{ name: "", regNo: "", email: "", phone: "" }]);
   const [selectedDomain, setSelectedDomain] = useState("");
 
   const [formData, setFormData] = useState({
@@ -73,7 +73,8 @@ function Register() {
       name: "",
       regNo: "",
       email: "",
-      phone: ""
+      phone: "",
+      password: ""
     },
     department: "",
     year: "",
@@ -95,25 +96,22 @@ function Register() {
     });
 
     setTimeout(() => {
-    problemRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "center"
-    });
-  }, 200);
+      problemRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }, 200);
   };
 
   const handleProblemChange = (e) => {
-
-  handleChange(e);
-
-  // ✅ scroll to abstract
-  setTimeout(() => {
-    abstractRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "center"
-    });
-  }, 200);
-};
+    handleChange(e);
+    setTimeout(() => {
+      abstractRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }, 200);
+  };
 
   const selectedProblems =
     domains.find(d => d.name === selectedDomain)?.problems || [];
@@ -121,28 +119,51 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await axios.post("http://localhost:5000/api/register", {
-      teamName: formData.teamName,
-      leader: formData.leader,
-      members,
-      department: formData.department,
-      year: formData.year,
-      domain: selectedDomain,
-      problemTitle: formData.problemTitle,
-      abstract: formData.abstract
-    });
+    try {
 
-    navigate("/success");
+      /* REGISTER */
+      await axios.post(
+        "http://localhost:5000/api/team/register",
+        {
+          teamName: formData.teamName,
+          leader: formData.leader,
+          members,
+          department: formData.department,
+          year: formData.year,
+          domain: selectedDomain,
+          problemTitle: formData.problemTitle,
+          abstract: formData.abstract
+        }
+      );
+
+      /* AUTO LOGIN */
+      const loginRes = await axios.post(
+        "http://localhost:5000/api/team/login",
+        {
+          email: formData.leader.email,
+          password: formData.leader.password
+        }
+      );
+
+      localStorage.setItem(
+        "teamToken",
+        loginRes.data.token
+      );
+
+      navigate("/student/dashboard");
+
+    } catch (err) {
+  console.log("FRONTEND ERROR:", err.response?.data);
+  toast.error(err.response?.data?.message || "Registration failed ❌");
+}
   };
 
-  /* ================= MEMBERS ================= */
-
   const addMember = () =>
-  members.length < 4 &&
-  setMembers([
-    ...members,
-    { name: "", regNo: "", email: "", phone: "" }
-  ]);
+    members.length < 3 &&
+    setMembers([
+      ...members,
+      { name: "", regNo: "", email: "" }
+    ]);
 
   const removeMember = (index) =>
     setMembers(members.filter((_, i) => i !== index));
@@ -154,8 +175,8 @@ function Register() {
       <div className="min-h-screen flex justify-center items-center pt-28 px-4 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
 
         <motion.div
-          initial={{ opacity:0,y:40 }}
-          animate={{ opacity:1,y:0 }}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-4xl bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-10"
         >
 
@@ -165,10 +186,10 @@ function Register() {
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
 
-            <Input name="teamName" placeholder="Team Name" onChange={handleChange}/>
-            <Input
-              placeholder="Team Leader Name"
-              onChange={(e)=>
+            <Input name="teamName" placeholder="Team Name" onChange={handleChange} />
+
+            <Input placeholder="Team Leader Name"
+              onChange={(e) =>
                 setFormData({
                   ...formData,
                   leader: { ...formData.leader, name: e.target.value }
@@ -176,9 +197,8 @@ function Register() {
               }
             />
 
-            <Input
-              placeholder="Leader Register Number"
-              onChange={(e)=>
+            <Input placeholder="Leader Register Number"
+              onChange={(e) =>
                 setFormData({
                   ...formData,
                   leader: { ...formData.leader, regNo: e.target.value }
@@ -186,10 +206,8 @@ function Register() {
               }
             />
 
-            <Input
-              type="email"
-              placeholder="Leader Email"
-              onChange={(e)=>
+            <Input type="email" placeholder="Leader Email"
+              onChange={(e) =>
                 setFormData({
                   ...formData,
                   leader: { ...formData.leader, email: e.target.value }
@@ -197,9 +215,8 @@ function Register() {
               }
             />
 
-            <Input
-              placeholder="Leader Phone Number"
-              onChange={(e)=>
+            <Input placeholder="Leader Phone Number"
+              onChange={(e) =>
                 setFormData({
                   ...formData,
                   leader: { ...formData.leader, phone: e.target.value }
@@ -207,29 +224,38 @@ function Register() {
               }
             />
 
-            {/* MEMBERS */}
+            <Input type="password" placeholder="Create Password"
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  leader: { ...formData.leader, password: e.target.value }
+                })
+              }
+            />
+
             <div>
               <h3 className="font-semibold mb-3">Team Members</h3>
 
-              {members.map((member,index)=>(
+              {members.map((member, index) => (
                 <div key={index} className="space-y-2 mb-6">
+
                   <input
-                    placeholder={`Member ${index+1} Name`}
-                    className="w-full p-3 rounded-xl border border-gray-300"
-                    onChange={(e)=>{
-                      const updated=[...members];
-                      updated[index].name=e.target.value;
+                    placeholder={`Member ${index + 1} Name`}
+                    className="w-full p-3 rounded-xl border"
+                    onChange={(e) => {
+                      const updated = [...members];
+                      updated[index].name = e.target.value;
                       setMembers(updated);
                     }}
                     required
                   />
 
                   <input
-                    placeholder={`Member ${index+1} Reg No`}
-                    className="w-full p-3 rounded-xl border border-gray-300"
-                    onChange={(e)=>{
-                      const updated=[...members];
-                      updated[index].regNo=e.target.value;
+                    placeholder={`Member ${index + 1} Reg No`}
+                    className="w-full p-3 rounded-xl border"
+                    onChange={(e) => {
+                      const updated = [...members];
+                      updated[index].regNo = e.target.value;
                       setMembers(updated);
                     }}
                     required
@@ -237,31 +263,20 @@ function Register() {
 
                   <input
                     type="email"
-                    placeholder={`Member ${index+1} Email`}
-                    className="w-full p-3 rounded-xl border border-gray-300"
-                    onChange={(e)=>{
-                      const updated=[...members];
-                      updated[index].email=e.target.value;
+                    placeholder={`Member ${index + 1} Email`}
+                    className="w-full p-3 rounded-xl border"
+                    onChange={(e) => {
+                      const updated = [...members];
+                      updated[index].email = e.target.value;
                       setMembers(updated);
                     }}
                     required
                   />
 
-                  <input
-                    placeholder={`Member ${index+1} Phone`}
-                    className="w-full p-3 rounded-xl border border-gray-300"
-                    onChange={(e)=>{
-                      const updated=[...members];
-                      updated[index].phone=e.target.value;
-                      setMembers(updated);
-                    }}
-                    required
-                  />
-
-                  {members.length>1 && (
+                  {members.length > 1 && (
                     <button
                       type="button"
-                      onClick={()=>removeMember(index)}
+                      onClick={() => removeMember(index)}
                       className="w-11 h-11 bg-red-100 rounded-xl">
                       ❌
                     </button>
@@ -270,72 +285,50 @@ function Register() {
                 </div>
               ))}
 
-              {members.length<4 && (
-                <button type="button" onClick={addMember}
-                  className="text-indigo-600">
+              {members.length < 4 && (
+                <button type="button" onClick={addMember} className="text-indigo-600">
                   + Add Member
                 </button>
               )}
             </div>
 
-            <Input name="department" placeholder="Department" onChange={handleChange}/>
+            <Input name="department" placeholder="Department" onChange={handleChange} />
 
-            {/* YEAR */}
-            <select
-              name="year"
-              onChange={handleChange}
-              required
-              className="w-full block p-3 rounded-xl border border-gray-300"
-            >
+            <select name="year" onChange={handleChange} required className="p-3 rounded-xl border">
               <option value="">Select Year</option>
               <option>2nd Year</option>
               <option>3rd Year</option>
             </select>
 
-            {/* DOMAIN */}
-            <select
-              value={selectedDomain}
-              onChange={handleDomainChange}
-              required
-              className="w-full block p-3 rounded-xl border border-gray-300"
-            >
+            <select value={selectedDomain} onChange={handleDomainChange} required className="p-3 rounded-xl border">
               <option value="">Select Domain</option>
-              {domains.map((d,i)=>(
+              {domains.map((d, i) => (
                 <option key={i}>{d.name}</option>
               ))}
             </select>
 
-            {/* PROBLEM */}
             {selectedDomain && (
-  <div ref={problemRef}>
-    <select
-      name="problemTitle"
-      onChange={handleProblemChange}
-      required
-      className="w-full block p-3 rounded-xl border border-gray-300"
-    >
-      <option value="">Select Problem Statement</option>
+              <div ref={problemRef}>
+                <select name="problemTitle" onChange={handleProblemChange} required className="p-3 rounded-xl border">
+                  <option>Select Problem</option>
+                  {selectedProblems.map((p, i) => (
+                    <option key={i}>{p}</option>
+                  ))}
+                </select>
+              </div>
+            )}
 
-      {selectedProblems.map((p,i)=>(
-        <option key={i}>{p}</option>
-      ))}
-
-    </select>
-  </div>
-)}
-
-            {/* ABSTRACT */}
             {formData.problemTitle && (
-  <div ref={abstractRef}>
-    <textarea
-      name="abstract"
-      placeholder="Project Abstract..."
-      onChange={handleChange}
-      required
-      className="w-full h-40 p-3 rounded-xl border border-gray-300 resize-none"
-    />
-  </div>
-)}
+              <div ref={abstractRef}>
+                <textarea
+                  name="abstract"
+                  placeholder="Project Abstract"
+                  onChange={handleChange}
+                  required
+                  className="w-full h-40 p-3 rounded-xl border"
+                />
+              </div>
+            )}
 
             <button
               type="submit"
@@ -348,12 +341,12 @@ function Register() {
         </motion.div>
       </div>
 
-      <ToastContainer position="top-center"/>
+      <ToastContainer position="top-center" />
     </>
   );
 }
 
-function Input({name,type="text",placeholder,onChange}) {
+function Input({ name, type = "text", placeholder, onChange }) {
   return (
     <input
       name={name}

@@ -121,7 +121,14 @@ export default function ProblemStatements() {
       {
         id: 17,
         title: "Workflow Automation & Process Optimization System",
-        description: `This project focuses on developing a smart system that automates routine and repetitive workflows in organizations. In many companies, tasks such as approvals, document processing, employee requests, and internal communications are handled manually, which leads to delays and errors. The system digitizes these processes and automatically assigns tasks based on predefined rules and priorities. It tracks progress in real time and sends notifications to responsible members. An admin dashboard provides insights into workflow efficiency and identifies bottlenecks. This improves productivity, reduces manual effort, and ensures smoother operations across departments.`
+        description: `Organizations across industries handle numerous internal processes such as approvals, employee requests, document verification, reporting, and task coordination. In many cases, these workflows are managed manually through emails, spreadsheets, or paper-based systems. This leads to delays, miscommunication, duplication of work, and lack of transparency.
+Participants are challenged to design an intelligent workflow automation system that digitizes and
+streamlines organizational processes. The solution should allow task creation, automated
+assignment based on predefined rules, status tracking, and real-time notifications. The system may
+include analytics to identify bottlenecks and improve process efficiency. Artificial Intelligence or
+rule-based optimization techniques can be used to enhance task prioritization and workflow
+management. The goal is to increase productivity, reduce operational delays, and ensure smooth
+coordination across departments.`
       },
       {
         id: 18,

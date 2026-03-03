@@ -1,0 +1,246 @@
+const express = require("express");
+const router = express.Router();
+
+const Team = require("../models/Team");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const teamAuth = require("../middleware/teamAuth");
+
+
+/* ======================================================
+   ✅ REGISTER
+====================================================== */
+
+router.post("/register", async (req, res) => {
+
+  try {
+
+    const {
+      teamName,
+      leader,
+      members,
+      department,
+      year,
+      domain,
+      problemTitle,
+      abstract
+    } = req.body;
+
+    if (!leader.password)
+      return res.status(400).json({
+        message: "Password is required"
+      });
+
+    const existing = await Team.findOne({
+      $or: [
+        { "leader.regNo": leader.regNo },
+        { "members.regNo": leader.regNo }
+      ]
+    });
+
+    if (existing)
+      return res.status(400).json({
+        message: "Leader already registered"
+      });
+
+    leader.password = await bcrypt.hash(leader.password, 10);
+
+    const team = new Team({
+      teamName,
+      leader,
+      members,
+      department,
+      year,
+      domain,
+      problemTitle,
+      abstract
+    });
+
+    await team.save();
+
+    res.json({
+      message: "Registered Successfully"
+    });
+
+  } catch (err) {
+
+    console.log("REGISTER ERROR:", err);
+
+    res.status(400).json({
+      message: err.message
+    });
+
+  }
+});
+
+
+/* ======================================================
+   ✅ LOGIN (Leader OR Member)
+====================================================== */
+
+router.post("/login", async (req, res) => {
+
+  try {
+
+    const { email, password } = req.body;
+
+    const team = await Team.findOne({
+      $or: [
+        { "leader.email": email },
+        { "members.email": email }
+      ]
+    });
+
+    if (!team)
+      return res.status(404).json({
+        message: "Not registered"
+      });
+
+    const valid = await bcrypt.compare(
+      password,
+      team.leader.password
+    );
+
+    if (!valid)
+      return res.status(401).json({
+        message: "Invalid Password"
+      });
+
+    const token = jwt.sign(
+      { teamId: team._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "2d" }
+    );
+
+    res.json({
+      token,
+      teamName: team.teamName
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      message: "Server Error"
+    });
+
+  }
+});
+
+
+/* ======================================================
+   ✅ DASHBOARD (SECURE)
+====================================================== */
+
+router.get("/dashboard", teamAuth, async (req, res) => {
+
+  try {
+
+    const team = await Team.findById(req.team.teamId)
+      .select("-leader.password");
+
+    if (!team)
+      return res.status(404).json({
+        message: "Team not found"
+      });
+
+    res.json(team);
+
+  } catch (err) {
+
+    res.status(500).json({
+      message: "Server Error"
+    });
+
+  }
+
+});
+
+
+/* ======================================================
+   ✅ UPDATE ABSTRACT (Editable till March 10)
+====================================================== */
+
+router.put("/update-abstract", teamAuth, async (req, res) => {
+
+  try {
+
+    const deadline = new Date("2026-03-10T23:59:59");
+
+    if (new Date() > deadline)
+      return res.status(403).json({
+        message: "Editing time expired"
+      });
+
+    const updated = await Team.findByIdAndUpdate(
+      req.team.teamId,
+      { abstract: req.body.abstract },
+      { new: true }
+    ).select("-leader.password");
+
+    res.json(updated);
+
+  } catch (err) {
+
+    res.status(500).json({
+      message: "Update failed"
+    });
+
+  }
+
+});
+
+
+/* ======================================================
+   ✅ GET ALL TEAMS (STAFF DASHBOARD)
+====================================================== */
+
+router.get("/teams", async (req, res) => {
+
+  try {
+
+    const teams = await Team.find()
+      .select("-leader.password");
+
+    res.json(teams);
+
+  } catch (err) {
+
+    res.status(500).json({
+      message: "Failed to fetch teams"
+    });
+
+  }
+
+});
+
+
+/* ======================================================
+   ✅ UPDATE TEAM STATUS (STAFF)
+====================================================== */
+
+router.put("/status/:id", async (req, res) => {
+
+  try {
+
+    const updated = await Team.findByIdAndUpdate(
+      req.params.id,
+      { status: req.body.status },
+      { new: true }
+    );
+
+    res.json(updated);
+
+  } catch (err) {
+
+    res.status(500).json({
+      message: "Status update failed"
+    });
+
+  }
+
+});
+
+
+module.exports = router;

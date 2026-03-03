@@ -571,21 +571,29 @@ export default function Home() {
     gap-6">
 
       {/* REGISTER */}
-      <button
-        onClick={() => navigate("/register")}
-        className="
-        px-10 py-4
-        rounded-xl
-        bg-white
-        text-indigo-600
-        font-semibold
-        shadow-xl
-        hover:scale-105
-        active:scale-95
-        transition"
-      >
-        Register Now →
-      </button>
+      <div className="mt-10 flex flex-col sm:flex-row gap-5">
+
+  {/* REGISTER */}
+  <motion.button
+    whileHover={{
+      scale:1.08,
+      boxShadow:"0px 20px 45px rgba(99,102,241,0.35)"
+    }}
+    whileTap={{ scale:0.95 }}
+    onClick={()=>navigate("/register")}
+    className="
+    px-12 py-4
+    rounded-2xl
+    text-white font-semibold text-lg
+    bg-gradient-to-r
+    from-indigo-600 to-purple-600
+    shadow-xl"
+  >
+    Register Now →
+  </motion.button>
+
+
+</div>
 
 
       {/* VIEW PROBLEMS */}
@@ -611,6 +619,87 @@ export default function Home() {
   </motion.div>
 
 </section>
+
+
+
+{/* ================= FOOTER START ================= */}
+
+<footer className="
+bg-[#0B1120]
+text-gray-300
+pt-12
+pb-6
+px-6
+border-t border-gray-700
+">
+
+  <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-10">
+
+    {/* COLLEGE ADDRESS */}
+    <div>
+      <h3 className="text-xl font-semibold text-white mb-4">
+        College Address
+      </h3>
+
+      <p className="leading-relaxed text-sm">
+        Saranathan College of Engineering<br/>
+        Venkateswara Nagar,<br/>
+        Trichy–Madurai Main Road (NH 45 B),<br/>
+        Edamalapatti Pudur (Post),<br/>
+        Panjappur, Tiruchirappalli – 620012
+      </p>
+    </div>
+
+    {/* STUDENT COORDINATORS */}
+    <div>
+      <h3 className="text-xl font-semibold text-white mb-4">
+        Student Coordinators
+      </h3>
+
+      <p className="text-sm mb-3">
+        Name: Viswanath E<br/>
+        Phone: +91 83000 81141
+      </p>
+
+      <p className="text-sm mb-3">
+        Name: Vishaal P R<br/>
+        Phone: +91 89033 47092
+      </p>
+
+      <p className="text-sm">
+        Name: Vimal A<br/>
+        Phone: +91 91503 16100
+      </p>
+    </div>
+
+    {/* SUPPORT */}
+    <div>
+      <h3 className="text-xl font-semibold text-white mb-4">
+        Support
+      </h3>
+
+      <p className="text-sm">
+        For queries & assistance:
+      </p>
+
+      <p className="mt-2 text-indigo-400 font-medium">
+        it264061@saranathan.ac.in
+      </p>
+    </div>
+
+  </div>
+
+  {/* COPYRIGHT */}
+  <div className="text-center text-sm text-gray-500 mt-10 border-t border-gray-700 pt-4">
+    © {new Date().getFullYear()} IDEATHON 2026 |
+    Saranathan College of Engineering
+  </div>
+
+</footer>
+
+{/* ================= FOOTER END ================= */}
+
     </>
   );
 }
+    

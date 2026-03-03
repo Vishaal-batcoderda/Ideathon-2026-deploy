@@ -26,7 +26,7 @@ export default function StaffLogin() {
     try {
 
       const res = await axios.post(
-        "http://localhost:5000/api/staff-login",
+        "http://localhost:5000/api/staff/login",
         login
       );
 
@@ -35,7 +35,7 @@ export default function StaffLogin() {
       navigate("/staff-success");
 
     } catch (err) {
-      alert("Invalid Credentials ❌");
+      toast.error("Invalid Credentials ❌");
       console.log(err);
     }
   };

@@ -1,0 +1,2 @@
+cd Ideathon_2k26
+git pull

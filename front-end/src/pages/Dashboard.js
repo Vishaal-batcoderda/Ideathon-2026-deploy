@@ -33,7 +33,7 @@ function Dashboard() {
   const fetchTeams = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/teams"
+        "http://localhost:5000/api/team/teams"
       );
       setTeams(res.data);
     } catch (err) {
@@ -44,7 +44,7 @@ function Dashboard() {
   /* ================= STATUS UPDATE ================= */
   const updateStatus = async (id, status) => {
     await axios.put(
-      `http://localhost:5000/api/team/${id}`,
+      `http://localhost:5000/api/team/status/${id}`,
       { status }
     );
     fetchTeams();
@@ -155,7 +155,6 @@ function Dashboard() {
             <thead className="bg-indigo-600 text-white">
               <tr>
                 <th className="p-4">Team</th>
-                <th>Leader</th>
                 <th>Email</th>
                 <th>Dept</th>
                 <th>Year</th>
@@ -178,8 +177,7 @@ function Dashboard() {
                     {team.teamName}
                   </td>
 
-                  <td>{team.leaderName}</td>
-                  <td>{team.email}</td>
+                  <td>{team.leader?.email}</td>
                   <td>{team.department}</td>
                   <td>{team.year}</td>
 

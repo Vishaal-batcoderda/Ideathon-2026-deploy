@@ -1,0 +1,228 @@
+import Navbar from "../components/Navbar";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
+export default function StudentDashboard() {
+
+  const [team, setTeam] = useState(null);
+  const [editing, setEditing] = useState(false);
+  const [newAbstract, setNewAbstract] = useState("");
+
+  const navigate = useNavigate();
+
+  /* ================= DEADLINE LOGIC ================= */
+  const deadline = new Date("2026-03-10T23:59:59");
+  const isEditable = new Date() <= deadline;
+
+  /* ================= FETCH TEAM ================= */
+  useEffect(() => {
+
+    const token = localStorage.getItem("teamToken");
+
+    if (!token) {
+      navigate("/student/login");
+      return;
+    }
+
+    axios.get(
+      "http://localhost:5000/api/team/dashboard",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+    .then(res => {
+      setTeam(res.data);
+      setNewAbstract(res.data.abstract);
+    })
+    .catch(() => {
+      localStorage.removeItem("teamToken");
+      navigate("/student/login");
+    });
+
+  }, [navigate]);
+
+  /* ================= UPDATE ABSTRACT ================= */
+  const updateAbstract = async () => {
+
+    try {
+
+      await axios.put(
+        `http://localhost:5000/api/team/update-abstract`,
+        { abstract: newAbstract },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("teamToken")}`
+          }
+        }
+      );
+
+      setTeam({ ...team, abstract: newAbstract });
+      setEditing(false);
+      toast.success("Abstract Updated Successfully ✅");
+
+    } catch {
+      toast.error("Update Failed ❌");
+    }
+  };
+
+  if (!team)
+    return <h1 className="pt-32 text-center">Loading...</h1>;
+
+  return (
+    <>
+      <Navbar />
+
+      <div className="min-h-screen pt-32 px-6 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+
+        <motion.div
+          initial={{ opacity:0, y:30 }}
+          animate={{ opacity:1, y:0 }}
+          className="max-w-5xl mx-auto bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-10"
+        >
+
+          <h1 className="text-3xl font-bold text-indigo-600 mb-8">
+            Student Dashboard
+          </h1>
+
+          {/* ================= TEAM DETAILS TABLE ================= */}
+          <table className="w-full border border-gray-300 mb-8">
+
+            <tbody>
+
+              <tr className="border">
+                <td className="p-3 font-semibold bg-gray-100">Team Name</td>
+                <td className="p-3">{team.teamName}</td>
+              </tr>
+
+              <tr className="border">
+                <td className="p-3 font-semibold bg-gray-100">Leader</td>
+                <td className="p-3">
+                  {team.leader.name} ({team.leader.regNo})
+                  <br />
+                  <span className="text-sm text-gray-500">
+                    {team.leader.email}
+                  </span>
+                </td>
+              </tr>
+
+              <tr className="border">
+                <td className="p-3 font-semibold bg-gray-100">Department</td>
+                <td className="p-3">{team.department}</td>
+              </tr>
+
+              <tr className="border">
+                <td className="p-3 font-semibold bg-gray-100">Year</td>
+                <td className="p-3">{team.year}</td>
+              </tr>
+
+              <tr className="border">
+                <td className="p-3 font-semibold bg-gray-100">Status</td>
+                <td className="p-3">Pending</td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+          {/* ================= TEAM MEMBERS TABLE ================= */}
+          <h2 className="text-xl font-semibold mb-4">
+            Team Members
+          </h2>
+
+          <table className="w-full border border-gray-300 mb-8 text-center">
+
+            <thead className="bg-indigo-600 text-white">
+              <tr>
+                <th className="p-3">Name</th>
+                <th>Register No</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              {team.members.map((member, index) => (
+                <tr key={index} className="border hover:bg-indigo-50">
+                  <td className="p-3">{member.name}</td>
+                  <td>{member.regNo}</td>
+                  <td>{member.email}</td>
+                </tr>
+              ))}
+
+            </tbody>
+
+          </table>
+
+          {/* ================= DOMAIN & PROBLEM ================= */}
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold mb-2">Domain</h2>
+            <p>{team.domain}</p>
+
+            <h2 className="text-xl font-semibold mt-6 mb-2">
+              Problem Statement
+            </h2>
+            <p>{team.problemTitle}</p>
+          </div>
+
+          {/* ================= ABSTRACT ================= */}
+          <div>
+
+            <h2 className="text-xl font-semibold mb-3">
+              Project Abstract
+            </h2>
+
+            {editing ? (
+              <>
+                <textarea
+                  value={newAbstract}
+                  onChange={(e)=>setNewAbstract(e.target.value)}
+                  className="w-full h-40 p-3 border rounded-xl"
+                />
+
+                <div className="mt-4 space-x-3">
+                  <button
+                    onClick={updateAbstract}
+                    className="px-5 py-2 bg-green-600 text-white rounded-lg">
+                    Save
+                  </button>
+
+                  <button
+                    onClick={()=>setEditing(false)}
+                    className="px-5 py-2 bg-gray-400 text-white rounded-lg">
+                    Cancel
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="text-gray-700 whitespace-pre-line">
+                  {team.abstract}
+                </p>
+
+                {isEditable ? (
+                  <button
+                    onClick={()=>setEditing(true)}
+                    className="mt-4 px-5 py-2 bg-indigo-600 text-white rounded-lg">
+                    Edit Abstract
+                  </button>
+                ) : (
+                  <div className="mt-4 p-3 bg-yellow-100 border rounded-lg">
+                    🔒 Editing closed after March 10
+                  </div>
+                )}
+              </>
+            )}
+
+          </div>
+
+        </motion.div>
+
+      </div>
+    </>
+  );
+}
