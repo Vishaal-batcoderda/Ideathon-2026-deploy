@@ -62,7 +62,7 @@ function Register() {
   ];
 
   const [members, setMembers] = useState([
-    { name: "", regNo: "", email: "" }
+    { name: "", regNo: "", email: "", year: "" }
   ]);
 
   const [selectedDomain, setSelectedDomain] = useState("");
@@ -74,9 +74,10 @@ function Register() {
       regNo: "",
       email: "",
       phone: "",
+      year: "",
       password: ""
     },
-    department: "",
+    department: "Information Technology",
     year: "",
     problemTitle: "",
     abstract: ""
@@ -121,9 +122,8 @@ function Register() {
 
     try {
 
-      /* REGISTER */
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/team/register`,
+        "http://localhost:5000/api/team/register",
         {
           teamName: formData.teamName,
           leader: formData.leader,
@@ -136,9 +136,8 @@ function Register() {
         }
       );
 
-      /* AUTO LOGIN */
       const loginRes = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/team/login`,
+        "http://localhost:5000/api/team/login",
         {
           email: formData.leader.email,
           password: formData.leader.password
@@ -153,20 +152,25 @@ function Register() {
       navigate("/student/dashboard");
 
     } catch (err) {
-  console.log("FRONTEND ERROR:", err.response?.data);
-  toast.error(err.response?.data?.message || "Registration failed ❌");
-}
+      console.log("FRONTEND ERROR:", err.response?.data);
+      toast.error(err.response?.data?.message || "Registration failed ❌");
+    }
   };
 
   const addMember = () =>
     members.length < 3 &&
     setMembers([
       ...members,
-      { name: "", regNo: "", email: "" }
+      { name: "", regNo: "", email: "", year: "" }
     ]);
 
   const removeMember = (index) =>
     setMembers(members.filter((_, i) => i !== index));
+
+  const wordCount =
+    formData.abstract.trim() === ""
+      ? 0
+      : formData.abstract.trim().split(/\s+/).length;
 
   return (
     <>
@@ -181,7 +185,7 @@ function Register() {
         >
 
           <h2 className="text-4xl font-bold text-center text-indigo-600 mb-10">
-            Ideathon 2026 Registration
+            Protothon 2026 Registration
           </h2>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
@@ -197,7 +201,7 @@ function Register() {
               }
             />
 
-            <Input placeholder="Leader Register Number"
+            <Input placeholder="Register Number"
               onChange={(e) =>
                 setFormData({
                   ...formData,
@@ -206,7 +210,7 @@ function Register() {
               }
             />
 
-            <Input type="email" placeholder="Leader Email"
+            <Input type="email" placeholder="Email"
               onChange={(e) =>
                 setFormData({
                   ...formData,
@@ -215,7 +219,7 @@ function Register() {
               }
             />
 
-            <Input placeholder="Leader Phone Number"
+            <Input placeholder="Phone Number"
               onChange={(e) =>
                 setFormData({
                   ...formData,
@@ -223,6 +227,21 @@ function Register() {
                 })
               }
             />
+
+            <select
+              required
+              className="w-full p-3 rounded-xl border"
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  leader: { ...formData.leader, year: e.target.value }
+                })
+              }
+            >
+              <option value="">Year</option>
+              <option>2nd Year</option>
+              <option>3rd Year</option>
+            </select>
 
             <Input type="password" placeholder="Create Password"
               onChange={(e) =>
@@ -240,7 +259,7 @@ function Register() {
                 <div key={index} className="space-y-2 mb-6">
 
                   <input
-                    placeholder={`Member ${index + 1} Name`}
+                    placeholder={`${index + 1} Name`}
                     className="w-full p-3 rounded-xl border"
                     onChange={(e) => {
                       const updated = [...members];
@@ -251,7 +270,7 @@ function Register() {
                   />
 
                   <input
-                    placeholder={`Member ${index + 1} Reg No`}
+                    placeholder={`${index + 1} Reg No`}
                     className="w-full p-3 rounded-xl border"
                     onChange={(e) => {
                       const updated = [...members];
@@ -263,7 +282,7 @@ function Register() {
 
                   <input
                     type="email"
-                    placeholder={`Member ${index + 1} Email`}
+                    placeholder={`${index + 1} Email`}
                     className="w-full p-3 rounded-xl border"
                     onChange={(e) => {
                       const updated = [...members];
@@ -272,6 +291,20 @@ function Register() {
                     }}
                     required
                   />
+
+                  <select
+                    className="w-full p-3 rounded-xl border"
+                    required
+                    onChange={(e) => {
+                      const updated = [...members];
+                      updated[index].year = e.target.value;
+                      setMembers(updated);
+                    }}
+                  >
+                    <option value="">Year</option>
+                    <option>2nd Year</option>
+                    <option>3rd Year</option>
+                  </select>
 
                   {members.length > 1 && (
                     <button
@@ -291,14 +324,6 @@ function Register() {
                 </button>
               )}
             </div>
-
-            <Input name="department" placeholder="Department" onChange={handleChange} />
-
-            <select name="year" onChange={handleChange} required className="p-3 rounded-xl border">
-              <option value="">Select Year</option>
-              <option>2nd Year</option>
-              <option>3rd Year</option>
-            </select>
 
             <select value={selectedDomain} onChange={handleDomainChange} required className="p-3 rounded-xl border">
               <option value="">Select Domain</option>
@@ -322,11 +347,35 @@ function Register() {
               <div ref={abstractRef}>
                 <textarea
                   name="abstract"
-                  placeholder="Project Abstract"
-                  onChange={handleChange}
+                  placeholder="Project Abstract (Max 300 words)"
+                  value={formData.abstract}
+                  onChange={(e) => {
+
+                    const text = e.target.value;
+
+                    const count = text
+                      .trim()
+                      .split(/\s+/)
+                      .filter(word => word.length > 0).length;
+
+                    if (count <= 300) {
+                      setFormData({
+                        ...formData,
+                        abstract: text
+                      });
+                    } else {
+                      toast.error("Abstract cannot exceed 300 words ❌");
+                    }
+
+                  }}
                   required
                   className="w-full h-40 p-3 rounded-xl border"
                 />
+
+                <p className="text-sm text-gray-500 mt-1">
+                  {wordCount} / 300 words
+                </p>
+
               </div>
             )}
 
