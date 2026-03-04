@@ -1,5 +1,5 @@
 import Navbar from "../components/Navbar";
-import ideathon from "../assets/ideathon.png";
+import protothon from "../assets/protothon.png";
 import step1 from "../assets/steps/step1.png";
 import step2 from "../assets/steps/step2.png";
 import step3 from "../assets/steps/step3.png";
@@ -49,8 +49,8 @@ export default function Home() {
       image: step3,
     },
     {
-      title: "Submit & Win",
-      desc: "Present your innovation and compete for exciting rewards.",
+      title: "Present & Compete",
+      desc: "Showcase your innovation and present your solution to the judges.",
       image: step4,
     },
   ];
@@ -117,8 +117,8 @@ export default function Home() {
       className="md:w-1/2 flex justify-center"
     >
       <motion.img
-        src={ideathon}
-        alt="Ideathon"
+        src={protothon}
+        alt="Protothon"
         className="w-[280px] md:w-[520px]"
         animate={{
           y:[0,-18,0],
@@ -152,7 +152,7 @@ export default function Home() {
       to-pink-600
       bg-clip-text
       text-transparent">
-        IDEATHON 2026
+        Protothon 2026
       </h1>
 
       <p className="mt-6 text-gray-600 text-lg md:text-xl">
@@ -691,7 +691,7 @@ border-t border-gray-700
 
   {/* COPYRIGHT */}
   <div className="text-center text-sm text-gray-500 mt-10 border-t border-gray-700 pt-4">
-    © {new Date().getFullYear()} IDEATHON 2026 |
+    © {new Date().getFullYear()} Protothon 2026 |
     Saranathan College of Engineering
   </div>
 
