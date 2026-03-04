@@ -1,3 +1,4 @@
+
 import Navbar from "../components/Navbar";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -12,6 +13,11 @@ export default function StudentDashboard() {
   const [newAbstract, setNewAbstract] = useState("");
 
   const navigate = useNavigate();
+
+  const logout = () => {
+  localStorage.removeItem("teamToken");
+  navigate("/student/login");
+};
 
   /* ================= DEADLINE LOGIC ================= */
   const deadline = new Date("2026-03-10T23:59:59");
@@ -28,7 +34,7 @@ export default function StudentDashboard() {
     }
 
     axios.get(
-      `${process.env.REACT_APP_API_URL}/api/team/dashboard`,
+      "http://localhost:5000/api/team/dashboard",
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -46,13 +52,15 @@ export default function StudentDashboard() {
 
   }, [navigate]);
 
+
+
   /* ================= UPDATE ABSTRACT ================= */
   const updateAbstract = async () => {
 
     try {
 
       await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/team/update-abstract`,
+        `http://localhost:5000/api/team/update-abstract`,
         { abstract: newAbstract },
         {
           headers: {
@@ -85,9 +93,25 @@ export default function StudentDashboard() {
           className="max-w-5xl mx-auto bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-10"
         >
 
-          <h1 className="text-3xl font-bold text-indigo-600 mb-8">
-            Student Dashboard
-          </h1>
+         <div className="flex justify-between items-center mb-8">
+
+  <h1 className="text-3xl font-bold text-indigo-600">
+    Student Dashboard
+  </h1>
+
+  <button
+    onClick={logout}
+    className="
+    px-5 py-2
+    bg-red-500
+    text-white
+    rounded-lg
+    hover:scale-105
+    transition">
+    Logout
+  </button>
+
+</div>
 
           {/* ================= TEAM DETAILS TABLE ================= */}
           <table className="w-full border border-gray-300 mb-8">
