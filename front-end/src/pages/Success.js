@@ -99,7 +99,7 @@ export default function Success() {
             text-4xl font-bold
             text-gray-800
             mb-4">
-              Welcome to Ideathon 2026 
+              Welcome to Protothon 2026 
             </h1>
 
             <p className="
