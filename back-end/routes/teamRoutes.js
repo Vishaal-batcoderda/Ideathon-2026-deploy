@@ -242,5 +242,68 @@ router.put("/status/:id", async (req, res) => {
 
 });
 
+const ExcelJS = require("exceljs");
+
+/* ======================================================
+   EXPORT TEAMS TO EXCEL
+====================================================== */
+
+router.get("/export", async (req, res) => {
+
+  try {
+
+    const teams = await Team.find().select("-leader.password");
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Ideathon Teams");
+
+    worksheet.columns = [
+      { header: "Team Name", key: "teamName", width: 25 },
+      { header: "Leader Email", key: "leaderEmail", width: 30 },
+      { header: "Department", key: "department", width: 20 },
+      { header: "Year", key: "year", width: 10 },
+      { header: "Domain", key: "domain", width: 20 },
+      { header: "Problem Title", key: "problemTitle", width: 30 },
+      { header: "Status", key: "status", width: 15 }
+    ];
+
+    teams.forEach(team => {
+      worksheet.addRow({
+        teamName: team.teamName,
+        leaderEmail: team.leader?.email,
+        department: team.department,
+        year: team.year,
+        domain: team.domain,
+        problemTitle: team.problemTitle,
+        status: team.status
+      });
+    });
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=ideathon_teams.xlsx"
+    );
+
+    await workbook.xlsx.write(res);
+
+    res.end();
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      message: "Export failed"
+    });
+
+  }
+
+});
+
 
 module.exports = router;
