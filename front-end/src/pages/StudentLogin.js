@@ -9,7 +9,9 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 export default function StudentLogin() {
 
   const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [login, setLogin] = useState({
     email: "",
@@ -26,24 +28,29 @@ export default function StudentLogin() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    setLoading(true);
+
     try {
 
       const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/team/login`,
+        "https://protothon.onrender.com/api/team/login",
         login
       );
 
-      // ✅ store team token
       localStorage.setItem(
         "teamToken",
         res.data.token
       );
 
       navigate("/student/dashboard");
+      setLoading(false);
 
     } catch (err) {
+
+      setLoading(false);
       toast.error("Invalid Credentials ❌");
       console.log(err);
+
     }
   };
 
@@ -103,50 +110,38 @@ export default function StudentLogin() {
           {/* PASSWORD */}
           <div className="relative mb-8">
 
-  <div className="relative mb-8">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              onChange={handleChange}
+              required
+              className="
+              w-full
+              p-3 pr-12
+              rounded-xl
+              border border-gray-300
+              outline-none
+              focus:ring-2
+              focus:ring-indigo-500"
+            />
 
-  <input
-    type={showPassword ? "text" : "password"}
-    name="password"
-    placeholder="Password"
-    onChange={handleChange}
-    required
-    className="
-    w-full
-    p-3 pr-12
-    rounded-xl
-    border border-gray-300
-    outline-none
-    focus:ring-2
-    focus:ring-indigo-500"
-  />
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              className="
+              absolute right-4 top-1/2
+              -translate-y-1/2
+              cursor-pointer text-gray-500"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
 
-  <span
-    onClick={() => setShowPassword(!showPassword)}
-    className="
-    absolute right-4 top-1/2
-    -translate-y-1/2
-    cursor-pointer text-gray-500"
-  >
-    {showPassword ? <FaEyeSlash /> : <FaEye />}
-  </span>
+          </div>
 
-</div>
-
-  <span
-    onClick={() => setShowPassword(!showPassword)}
-    className="
-    absolute right-4 top-1/2
-    -translate-y-1/2
-    cursor-pointer text-gray-500"
-  >
-    {showPassword ? <FaEyeSlash /> : <FaEye />}
-  </span>
-
-</div>
           {/* LOGIN BUTTON */}
           <button
             type="submit"
+            disabled={loading}
             className="
             w-full py-3
             rounded-xl
@@ -155,11 +150,10 @@ export default function StudentLogin() {
             to-purple-600
             text-white
             font-semibold
-            hover:scale-105
-            active:scale-95
-            transition"
+            transition
+            disabled:opacity-70"
           >
-            Login →
+            {loading ? "Logging in..." : "Login →"}
           </button>
 
         </motion.form>
