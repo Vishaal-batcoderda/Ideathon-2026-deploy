@@ -6,12 +6,14 @@ import { ToastContainer } from "react-toastify";
 import { motion } from "framer-motion";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function Register() {
 
   const navigate = useNavigate();
   const problemRef = useRef(null);
   const abstractRef = useRef(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const domains = [
     {
@@ -123,7 +125,7 @@ function Register() {
     try {
 
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/team/register`,
+        "https://protothon.onrender.com/api/team/register",
         {
           teamName: formData.teamName,
           leader: formData.leader,
@@ -137,7 +139,7 @@ function Register() {
       );
 
       const loginRes = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/team/login`,
+        "https://protothon.onrender.com/api/team/login",
         {
           email: formData.leader.email,
           password: formData.leader.password
@@ -234,7 +236,6 @@ function Register() {
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  year: e.target.value,
                   leader: { ...formData.leader, year: e.target.value }
                 })
               }
@@ -244,14 +245,32 @@ function Register() {
               <option>3rd Year</option>
             </select>
 
-            <Input type="password" placeholder="Create Password"
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  leader: { ...formData.leader, password: e.target.value }
-                })
-              }
-            />
+            <div className="relative">
+
+  <input
+    type={showPassword ? "text" : "password"}
+    placeholder="Create Password"
+    required
+    onChange={(e) =>
+      setFormData({
+        ...formData,
+        leader: { ...formData.leader, password: e.target.value }
+      })
+    }
+    className="w-full p-3 pr-12 rounded-xl border border-gray-300"
+  />
+
+  <span
+    onClick={() => setShowPassword(!showPassword)}
+    className="
+    absolute right-4 top-1/2
+    -translate-y-1/2
+    cursor-pointer text-gray-500"
+  >
+    {showPassword ? <FaEyeSlash /> : <FaEye />}
+  </span>
+
+</div>
 
             <div>
               <h3 className="font-semibold mb-3">Team Members</h3>
