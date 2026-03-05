@@ -16,6 +16,7 @@ export default function StaffLogin() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setLogin({
@@ -27,18 +28,22 @@ export default function StaffLogin() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    setLoading(true);
+
     try {
 
       const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/staff/login`,
+        "https://protothon.onrender.com/api/staff/login",
         login
       );
 
       localStorage.setItem("token", res.data.token);
 
       navigate("/staff-success");
+      setLoading(false);
 
     } catch (err) {
+      setLoading(false);
       toast.error("Invalid Credentials ❌");
       console.log(err);
     }
@@ -131,21 +136,21 @@ export default function StaffLogin() {
 
           {/* LOGIN BUTTON */}
           <button
-            type="submit"
-            className="
-            w-full py-3
-            rounded-xl
-            bg-gradient-to-r
-            from-indigo-600
-            to-purple-600
-            text-white
-            font-semibold
-            hover:scale-105
-            active:scale-95
-            transition"
-          >
-            Login →
-          </button>
+  type="submit"
+  disabled={loading}
+  className="
+  w-full py-3
+  rounded-xl
+  bg-gradient-to-r
+  from-indigo-600
+  to-purple-600
+  text-white
+  font-semibold
+  transition
+  disabled:opacity-70"
+>
+  {loading ? "Logging in..." : "Login →"}
+</button>
 
         </motion.form>
 
