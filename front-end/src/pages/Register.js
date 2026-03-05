@@ -14,6 +14,7 @@ function Register() {
   const problemRef = useRef(null);
   const abstractRef = useRef(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const domains = [
     {
@@ -122,10 +123,12 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setLoading(true);
+
     try {
 
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/team/register`,
+        "https://protothon.onrender.com/api/team/register",
         {
           teamName: formData.teamName,
           leader: formData.leader,
@@ -139,7 +142,7 @@ function Register() {
       );
 
       const loginRes = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/team/login`,
+        "https://protothon.onrender.com/api/team/login",
         {
           email: formData.leader.email,
           password: formData.leader.password
@@ -152,8 +155,10 @@ function Register() {
       );
 
       navigate("/student/dashboard");
+      setLoading(false);
 
     } catch (err) {
+      setLoading(false);
       console.log("FRONTEND ERROR:", err.response?.data);
       toast.error(err.response?.data?.message || "Registration failed ❌");
     }
@@ -245,7 +250,7 @@ function Register() {
               <option>3rd Year</option>
             </select>
 
-            <div className="relative">
+            <div className="relative mb-2">
 
   <input
     type={showPassword ? "text" : "password"}
@@ -400,10 +405,11 @@ function Register() {
             )}
 
             <button
-              type="submit"
-              className="w-full py-4 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold">
-              Submit Registration →
-            </button>
+  type="submit"
+  disabled={loading}
+  className="w-full py-4 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold disabled:opacity-70">
+  {loading ? "Registering..." : "Submit Registration →"}
+</button>
 
           </form>
 
