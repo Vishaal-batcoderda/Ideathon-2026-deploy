@@ -69,10 +69,9 @@ export default function Home() {
   flex items-center
   overflow-hidden
   px-6 pt-24
-  bg-gradient-to-br
-  from-indigo-50
-  via-purple-50
-  to-pink-50"
+  bg-[linear-gradient(270deg,#eef2ff,#f5f3ff,#fdf2f8,#eef2ff)]
+bg-[length:400%_400%]
+animate-[gradientMove_12s_ease_infinite]"
 >
 
   {/* PARTICLES */}
@@ -141,32 +140,36 @@ export default function Home() {
       className="md:w-1/2 text-center md:text-left"
     >
 
-      <h1 className="
-      text-5xl md:text-7xl
-      font-extrabold
-      tracking-tight
-      leading-tight
-      bg-gradient-to-r
-      from-indigo-600
-      via-purple-600
-      to-pink-600
-      bg-clip-text
-      text-transparent">
-        Protothon 2026
-      </h1>
+      <motion.h1
+className="
+text-5xl md:text-7xl
+font-extrabold
+font-[Sora]
+tracking-tight
+bg-gradient-to-r
+from-indigo-600
+via-purple-600
+to-pink-600
+bg-clip-text
+text-transparent
+">
+Protothon 2026
+</motion.h1>
 
       <p className="mt-6 text-gray-600 text-lg md:text-xl">
         Innovate • Build • Transform Ideas Into Reality
       </p>
 
       <motion.div
-        initial={{ opacity:0, scale:0.9 }}
-        animate={{ opacity:1, scale:1 }}
-        transition={{ delay:0.4 }}
-        className="mt-8"
-      >
-        <Countdown />
-      </motion.div>
+  initial={{ opacity:0, scale:0.9 }}
+  animate={{ opacity:1, scale:1 }}
+  transition={{ delay:0.4 }}
+  className="mt-8 w-full flex justify-center"
+>
+  <div className="w-full max-w-md">
+    <Countdown />
+  </div>
+</motion.div>
 
       <motion.button
         whileHover={{
@@ -271,81 +274,131 @@ export default function Home() {
       </section>
 
 
-      {/* ================= EVENT TIMELINE ================= */}
-      <Reveal>
-        <section
-          id="timeline"
-          className="py-32 bg-white px-6 relative"
-        >
-          <h2 className="text-center text-4xl md:text-5xl font-bold mb-20">
-            Event Timeline
-          </h2>
+      {/* ================= APPLE STYLE TIMELINE ================= */}
+<Reveal>
+<section
+  id="timeline"
+  className="py-32 bg-white px-6 relative overflow-hidden"
+>
 
-          <div className="relative max-w-4xl mx-auto">
+<h2 className="text-center text-4xl md:text-5xl font-bold mb-24">
+Event Timeline
+</h2>
 
-            <div className="
-            absolute left-1/2 top-0
-            -translate-x-1/2
-            h-full w-[2px]
-            bg-gradient-to-b
-            from-indigo-400
-            via-purple-400
-            to-pink-400 opacity-60"
-            />
+<div className="relative max-w-6xl mx-auto">
 
-            {[
-              { title: "Registration Opens", date: "March 10" },
-              { title: "Registration Closes", date: "March 25" },
-              { title: "Shortlisting Announcement", date: "March 28" },
-              { title: "Final Presentation", date: "April 5" },
-            ].map((event, index) => (
+{/* glowing vertical line */}
+<div className="
+hidden md:block
+absolute left-1/2 top-0
+-translate-x-1/2
+h-full w-[3px]
+bg-gradient-to-b
+from-indigo-500
+via-purple-500
+to-pink-500
+opacity-70"
+/>
 
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className={`
-                relative flex items-center mb-20
-                ${index % 2 === 0
-                    ? "justify-start"
-                    : "justify-end"}
-                `}
-              >
+{[
+{ title:"Registration Opens", date:"March 10" },
+{ title:"Registration Closes", date:"March 25" },
+{ title:"Shortlisting Announcement", date:"March 28" },
+{ title:"Final Presentation", date:"April 5" },
+].map((event,index)=>{
 
-                <div className="
-                absolute left-1/2
-                -translate-x-1/2
-                w-5 h-5 rounded-full
-                bg-white border-4 border-indigo-500
-                shadow-[0_0_18px_rgba(99,102,241,0.7)]
-                z-10"
-                />
+const isLeft = index % 2 === 0;
 
-                <div className="
-                w-[90%] md:w-[45%]
-                bg-white/80 backdrop-blur-md
-                p-6 rounded-2xl shadow-lg
-                hover:shadow-2xl hover:-translate-y-2
-                transition-all duration-300
-                border border-gray-100">
+return(
 
-                  <h3 className="text-xl font-semibold text-indigo-600">
-                    {event.title}
-                  </h3>
+<motion.div
+key={index}
 
-                  <p className="text-gray-600 mt-2 font-medium">
-                    {event.date}
-                  </p>
+initial={{
+opacity:0,
+x:isLeft?-120:120,
+scale:0.95
+}}
 
-                </div>
+whileInView={{
+opacity:1,
+x:0,
+scale:1
+}}
 
-              </motion.div>
-            ))}
-          </div>
-        </section>
-      </Reveal>
+viewport={{once:true}}
+
+transition={{
+duration:0.8,
+ease:"easeOut"
+}}
+
+className={`
+relative flex items-center mb-28
+${isLeft ? "md:justify-start" : "md:justify-end"}
+justify-center
+`}
+>
+
+{/* glowing dot */}
+<div className="
+hidden md:flex
+absolute left-1/2
+-translate-x-1/2
+items-center justify-center
+">
+
+<div className="
+w-6 h-6 rounded-full
+bg-indigo-600
+shadow-[0_0_25px_rgba(99,102,241,0.9)]
+animate-pulse
+"/>
+
+</div>
+
+
+{/* timeline card */}
+<motion.div
+
+whileHover={{
+scale:1.05,
+y:-8
+}}
+
+className="
+w-full md:w-[42%]
+bg-white/70
+backdrop-blur-xl
+border border-gray-200
+p-7
+rounded-2xl
+shadow-xl
+transition-all
+duration-300
+"
+>
+
+<h3 className="text-xl font-semibold text-indigo-600">
+{event.title}
+</h3>
+
+<p className="text-gray-600 mt-2 font-medium">
+{event.date}
+</p>
+
+</motion.div>
+
+</motion.div>
+
+)
+
+})}
+
+</div>
+
+</section>
+</Reveal>
 
 
       {/* ✅ PROBLEM STATEMENTS ADDED HERE */}
@@ -443,9 +496,11 @@ export default function Home() {
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
         whileHover={{
-          y: -10,
-          scale: 1.05
-        }}
+y:-10,
+scale:1.05,
+rotateX:6,
+rotateY:-6
+}}
         className="
         relative
         group
