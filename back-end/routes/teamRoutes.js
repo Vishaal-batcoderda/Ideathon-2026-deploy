@@ -13,6 +13,7 @@ const teamAuth = require("../middleware/teamAuth");
 
 router.post("/register", async (req, res) => {
 
+  console.log("REGISTER BODY:",req.body);
   try {
 
     const {
