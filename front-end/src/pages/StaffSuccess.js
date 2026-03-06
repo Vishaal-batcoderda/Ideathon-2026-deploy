@@ -24,10 +24,7 @@ export default function StaffSuccess() {
         min-h-screen
         flex justify-center items-center
         px-4
-        bg-gradient-to-br
-        from-indigo-50
-        via-purple-50
-        to-pink-50"
+        bg-white"
       >
 
         <motion.div
@@ -35,8 +32,7 @@ export default function StaffSuccess() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6 }}
           className="
-          bg-white/80
-          backdrop-blur-xl
+          bg-white
           rounded-3xl
           shadow-2xl
           border border-gray-200
@@ -62,7 +58,7 @@ export default function StaffSuccess() {
           {/* TITLE */}
           <h1 className="
           text-3xl font-bold
-          text-indigo-600
+          text-black
           mb-4">
             Login Successful
           </h1>
@@ -87,9 +83,7 @@ export default function StaffSuccess() {
               transition={{ duration: 2 }}
               className="
               h-full
-              bg-gradient-to-r
-              from-indigo-600
-              to-purple-600"
+              bg-black"
             />
           </motion.div>
 
