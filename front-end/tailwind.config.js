@@ -2,14 +2,11 @@ module.exports = {
   content: ["./src/**/*.{js,jsx}"],
   darkMode: "class",
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["Plus Jakarta Sans", "sans-serif"],
+      },
+    },
   },
   plugins: [],
-
-  extend: {
-  fontFamily: {
-    sans: ["Plus Jakarta Sans", "sans-serif"],
-  },
-},
 };
-
