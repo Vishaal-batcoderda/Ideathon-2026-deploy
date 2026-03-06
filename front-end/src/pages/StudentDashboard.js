@@ -84,7 +84,7 @@ export default function StudentDashboard() {
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center px-4 sm:px-6 py-4 shadow bg-white gap-2">
 
   <img
-    src="/protothon.png"
+    src="/logo.png"
     alt="Protothon Logo"
     className="h-10 mx-auto sm:mx-0"
   />
