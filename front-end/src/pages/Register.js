@@ -128,7 +128,7 @@ function Register() {
   setLoading(true);
 
   try {
-
+    console.log(formData);
     const res = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/team/register`,
       {
