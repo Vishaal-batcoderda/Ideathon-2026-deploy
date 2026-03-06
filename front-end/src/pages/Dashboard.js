@@ -173,6 +173,7 @@ flex flex-wrap gap-4 items-center">
                 <th className="p-4">Team</th>
                 <th>Dept</th>
                 <th>Year</th>
+                <th>Problem Title</th>
                 <th>Abstract</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -195,6 +196,9 @@ flex flex-wrap gap-4 items-center">
                   <td>{team.leader?.email}</td>
                   <td>{team.department}</td>
                   <td>{team.year}</td>
+                  <td className="max-w-xs truncate">
+  {team.problemTitle || team.problemStatement}
+</td>
 
                   <td>
                     <button
