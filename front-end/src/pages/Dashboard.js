@@ -11,11 +11,8 @@ function Dashboard() {
   const [teams, setTeams] = useState([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
-
-  /* ✅ NEW STATE — ABSTRACT POPUP */
   const [selectedAbstract, setSelectedAbstract] = useState(null);
 
-  /* ================= AUTH ================= */
   useEffect(() => {
 
     const token = localStorage.getItem("token");
@@ -29,7 +26,6 @@ function Dashboard() {
 
   }, [navigate]);
 
-  /* ================= FETCH ================= */
   const fetchTeams = async () => {
     try {
       const res = await axios.get(
@@ -41,7 +37,6 @@ function Dashboard() {
     }
   };
 
-  /* ================= STATUS UPDATE ================= */
   const updateStatus = async (id, status) => {
     await axios.put(
       `${process.env.REACT_APP_API_URL}/api/team/status/${id}`,
@@ -50,7 +45,6 @@ function Dashboard() {
     fetchTeams();
   };
 
-  /* ================= FILTER ================= */
   const filteredTeams = teams.filter(team => {
 
     const matchSearch =
@@ -69,20 +63,15 @@ function Dashboard() {
     <>
       <Navbar />
 
-      <div className="
-      min-h-screen pt-28 px-6
-      bg-gradient-to-br
-      from-indigo-50
-      via-purple-50
-      to-pink-50">
+      <div className="min-h-screen pt-28 px-10 bg-white">
 
-        {/* ===== HEADER ===== */}
+        {/* HEADER */}
         <div className="
         flex flex-col md:flex-row
         justify-between items-center
         mb-10 gap-4">
 
-          <h1 className="text-4xl font-bold text-indigo-600">
+          <h1 className="text-4xl font-bold text-black">
             Staff Dashboard
           </h1>
 
@@ -94,17 +83,17 @@ function Dashboard() {
             className="
             px-5 py-2 rounded-lg
             bg-red-500 text-white
-            hover:scale-105 transition">
+            hover:opacity-90 transition">
             Logout
           </button>
 
         </div>
 
 
-        {/* ===== SEARCH + FILTER ===== */}
+        {/* SEARCH + FILTER */}
         <div className="
-        bg-white/80 backdrop-blur-xl
-        rounded-2xl shadow-lg
+        bg-gray-100
+        rounded-xl
         p-6 mb-8
         flex flex-wrap gap-4">
 
@@ -112,13 +101,19 @@ function Dashboard() {
             placeholder="Search Team..."
             value={search}
             onChange={(e)=>setSearch(e.target.value)}
-            className="p-3 rounded-lg border border-gray-300"
+            className="
+            p-3 rounded-lg
+            border border-gray-300
+            bg-white"
           />
 
           <select
             value={filter}
             onChange={(e)=>setFilter(e.target.value)}
-            className="p-3 rounded-lg border border-gray-300"
+            className="
+            p-3 rounded-lg
+            border border-gray-300
+            bg-white"
           >
             <option value="all">All</option>
             <option value="Selected">Selected</option>
@@ -128,25 +123,28 @@ function Dashboard() {
 
           <a
             href={`${process.env.REACT_APP_API_URL}/api/team/export`}
-            className="px-4 py-3 rounded-lg bg-green-600 text-white">
+            className="
+            px-4 py-3 rounded-lg
+            bg-green-600 text-white">
             Export Excel
           </a>
 
         </div>
 
 
-        {/* ===== TABLE ===== */}
+        {/* TABLE */}
         <motion.div
           initial={{ opacity:0, y:30 }}
           animate={{ opacity:1, y:0 }}
           className="
-          bg-white/80 backdrop-blur-xl
-          rounded-2xl shadow-xl
+          bg-white
+          rounded-xl
+          shadow-md
           overflow-x-auto">
 
           <table className="w-full text-center">
 
-            <thead className="bg-indigo-600 text-white">
+            <thead className="bg-gray-200">
               <tr>
                 <th className="p-4">Team</th>
                 <th>Email</th>
@@ -164,7 +162,7 @@ function Dashboard() {
 
                 <tr
                   key={team._id}
-                  className="border-t hover:bg-indigo-50"
+                  className="border-t hover:bg-gray-50"
                 >
 
                   <td className="p-4 font-semibold">
@@ -175,21 +173,18 @@ function Dashboard() {
                   <td>{team.department}</td>
                   <td>{team.year}</td>
 
-                  {/* ✅ VIEW ABSTRACT BUTTON */}
                   <td>
                     <button
                       onClick={()=>setSelectedAbstract(team)}
                       className="
                       px-3 py-1
-                      bg-indigo-500
+                      bg-black
                       text-white
-                      rounded-lg
-                      hover:scale-105 transition">
+                      rounded">
                       View
                     </button>
                   </td>
 
-                  {/* STATUS */}
                   <td>
                     <span className={`
                       px-3 py-1 rounded-full text-white
@@ -201,22 +196,25 @@ function Dashboard() {
                     </span>
                   </td>
 
-                  {/* ACTION */}
                   <td className="space-x-2">
 
                     <button
                       onClick={()=>updateStatus(team._id,"Selected")}
                       className="
-                      px-3 py-1 bg-green-500
-                      text-white rounded hover:scale-105">
+                      px-3 py-1
+                      bg-green-500
+                      text-white
+                      rounded">
                       Select
                     </button>
 
                     <button
                       onClick={()=>updateStatus(team._id,"Rejected")}
                       className="
-                      px-3 py-1 bg-red-500
-                      text-white rounded hover:scale-105">
+                      px-3 py-1
+                      bg-red-500
+                      text-white
+                      rounded">
                       Reject
                     </button>
 
@@ -233,7 +231,7 @@ function Dashboard() {
         </motion.div>
 
 
-        {/* ================= ABSTRACT POPUP ================= */}
+        {/* ABSTRACT POPUP */}
         <AnimatePresence>
 
         {selectedAbstract && (
@@ -244,7 +242,7 @@ function Dashboard() {
             exit={{ opacity:0 }}
             className="
             fixed inset-0
-            bg-black/40 backdrop-blur-sm
+            bg-black/40
             flex justify-center items-center
             z-50 px-4">
 
@@ -254,8 +252,8 @@ function Dashboard() {
               exit={{ scale:0.8 }}
               className="
               bg-white
-              rounded-2xl
-              shadow-2xl
+              rounded-xl
+              shadow-xl
               max-w-3xl w-full
               max-h-[80vh]
               overflow-y-auto
@@ -271,14 +269,15 @@ function Dashboard() {
 
               <h2 className="
               text-2xl font-bold
-              text-indigo-600 mb-4">
+              mb-4">
                 {selectedAbstract.teamName}
               </h2>
 
               <p className="
               text-gray-700
               leading-relaxed
-              whitespace-pre-line">
+              whitespace-pre-line
+              text-justify">
                 {selectedAbstract.abstract}
               </p>
 
