@@ -57,9 +57,9 @@ function Dashboard() {
     filter === "all" ||
     team.status === filter;
 
-  const matchDomain =
+ const matchDomain =
   domainFilter === "all" ||
-  team.domain === `Domain ${domainFilter}`;
+  team.domain === domainFilter;
 
   return matchSearch && matchFilter && matchDomain;
 
@@ -138,11 +138,27 @@ flex flex-wrap gap-4 items-center">
     bg-white"
   >
     <option value="all">All Domains</option>
-    <option value="1">Domain 1</option>
-    <option value="2">Domain 2</option>
-    <option value="3">Domain 3</option>
-    <option value="4">Domain 4</option>
-    <option value="5">Domain 5</option>
+    <option value="all">All Domains</option>
+
+<option value="Artificial Intelligence & Data Intelligence">
+Artificial Intelligence & Data Intelligence
+</option>
+
+<option value="Multipurpose Digital Infrastructure Systems">
+Multipurpose Digital Infrastructure Systems
+</option>
+
+<option value="Agriculture, FoodTech and Rural Development">
+Agriculture, FoodTech and Rural Development
+</option>
+
+<option value="Digital Platforms and Social Innovation">
+Digital Platforms and Social Innovation
+</option>
+
+<option value="Industry & Business Solutions">
+Industry & Business Solutions
+</option>
   </select>
 
   <a
