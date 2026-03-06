@@ -12,6 +12,7 @@ function Dashboard() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
   const [selectedAbstract, setSelectedAbstract] = useState(null);
+  const [domainFilter, setDomainFilter] = useState("all");
 
   useEffect(() => {
 
@@ -47,17 +48,22 @@ function Dashboard() {
 
   const filteredTeams = teams.filter(team => {
 
-    const matchSearch =
-      team.teamName
-        .toLowerCase()
-        .includes(search.toLowerCase());
+  const matchSearch =
+    team.teamName
+      .toLowerCase()
+      .includes(search.toLowerCase());
 
-    const matchFilter =
-      filter === "all" ||
-      team.status === filter;
+  const matchFilter =
+    filter === "all" ||
+    team.status === filter;
 
-    return matchSearch && matchFilter;
-  });
+  const matchDomain =
+    domainFilter === "all" ||
+    team.domain === domainFilter;
+
+  return matchSearch && matchFilter && matchDomain;
+
+});
 
   return (
     <>
@@ -92,44 +98,62 @@ function Dashboard() {
 
         {/* SEARCH + FILTER */}
         <div className="
-        bg-gray-100
-        rounded-xl
-        p-6 mb-8
-        flex flex-wrap gap-4">
+bg-gray-100
+rounded-xl
+p-6 mb-8
+flex flex-wrap gap-4 items-center">
 
-          <input
-            placeholder="Search Team..."
-            value={search}
-            onChange={(e)=>setSearch(e.target.value)}
-            className="
-            p-3 rounded-lg
-            border border-gray-300
-            bg-white"
-          />
+  <input
+    placeholder="Search Team..."
+    value={search}
+    onChange={(e)=>setSearch(e.target.value)}
+    className="
+    p-3 rounded-lg
+    border border-gray-300
+    bg-white"
+  />
 
-          <select
-            value={filter}
-            onChange={(e)=>setFilter(e.target.value)}
-            className="
-            p-3 rounded-lg
-            border border-gray-300
-            bg-white"
-          >
-            <option value="all">All</option>
-            <option value="Selected">Selected</option>
-            <option value="Rejected">Rejected</option>
-            <option value="Pending">Pending</option>
-          </select>
+  {/* STATUS FILTER */}
+  <select
+    value={filter}
+    onChange={(e)=>setFilter(e.target.value)}
+    className="
+    p-3 rounded-lg
+    border border-gray-300
+    bg-white"
+  >
+    <option value="all">All Status</option>
+    <option value="Selected">Selected</option>
+    <option value="Rejected">Rejected</option>
+    <option value="Pending">Pending</option>
+  </select>
 
-          <a
-            href={`${process.env.REACT_APP_API_URL}/api/team/export`}
-            className="
-            px-4 py-3 rounded-lg
-            bg-green-600 text-white">
-            Export Excel
-          </a>
+  {/* DOMAIN FILTER */}
+  <select
+    value={domainFilter}
+    onChange={(e)=>setDomainFilter(e.target.value)}
+    className="
+    p-3 rounded-lg
+    border border-gray-300
+    bg-white"
+  >
+    <option value="all">All Domains</option>
+    <option value="Domain 1">Domain 1</option>
+    <option value="Domain 2">Domain 2</option>
+    <option value="Domain 3">Domain 3</option>
+    <option value="Domain 4">Domain 4</option>
+    <option value="Domain 5">Domain 5</option>
+  </select>
 
-        </div>
+  <a
+    href={`${process.env.REACT_APP_API_URL}/api/team/export`}
+    className="
+    px-4 py-3 rounded-lg
+    bg-green-600 text-white">
+    Export Excel
+  </a>
+
+</div>
 
 
         {/* TABLE */}
@@ -147,7 +171,6 @@ function Dashboard() {
             <thead className="bg-gray-200">
               <tr>
                 <th className="p-4">Team</th>
-                <th>Email</th>
                 <th>Dept</th>
                 <th>Year</th>
                 <th>Abstract</th>
