@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import logo from "../assets/logo.png";
 
 const sections = ["home","about","timeline","problems","rules"];
 
@@ -9,14 +10,12 @@ function Navbar() {
   const location = useLocation();
 
   const [active, setActive] = useState("home");
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   /* ================= SCROLL EFFECT ================= */
   useEffect(() => {
 
     const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
       setMenuOpen(false);
     };
 
@@ -32,20 +31,30 @@ function Navbar() {
 
     const observer = new IntersectionObserver(
       (entries) => {
+
         entries.forEach((entry) => {
-          if (entry.isIntersecting)
+
+          if (entry.isIntersecting) {
             setActive(entry.target.id);
+          }
+
         });
+
       },
-      { threshold: 0.6 }
+      {
+        threshold: 0.5
+      }
     );
 
-    sections.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
+    const elements = sections
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
 
-    return () => observer.disconnect();
+    elements.forEach((el) => observer.observe(el));
+
+    return () => {
+      elements.forEach((el) => observer.unobserve(el));
+    };
 
   }, []);
 
@@ -59,38 +68,49 @@ function Navbar() {
       return;
     }
 
-    document
-      .getElementById(id)
-      ?.scrollIntoView({ behavior: "smooth" });
+    const element = document.getElementById(id);
+
+    if (element) {
+
+      const navbarHeight = 80;
+
+      const y =
+        element.getBoundingClientRect().top +
+        window.pageYOffset -
+        navbarHeight;
+
+      window.scrollTo({
+        top: y,
+        behavior: "smooth",
+      });
+
+    }
+
   };
 
   return (
 
     <nav
-      className={`
+      className="
       fixed top-0 w-full z-50
       transition-all duration-300
-      ${scrolled
-        ? "backdrop-blur-xl bg-white/70 shadow-md py-3"
-        : "bg-transparent py-5"}
-      `}
+      bg-white shadow-md
+      "
     >
 
       <div className="
       max-w-7xl mx-auto
       flex justify-between items-center
+      h-16
       px-6 md:px-10">
 
         {/* LOGO */}
-        <h1
+        <img
+          src={logo}
+          alt="Protothon Logo"
           onClick={() => scrollToSection("home")}
-          className="
-          text-xl md:text-2xl
-          font-bold text-indigo-600
-          cursor-pointer tracking-wide"
-        >
-          Protothon 2026
-        </h1>
+          className="h-14 object-contain cursor-pointer select-none"
+        />
 
         {/* ================= DESKTOP ================= */}
         <div className="
@@ -105,7 +125,7 @@ function Navbar() {
               className="
               relative cursor-pointer
               text-gray-700
-              hover:text-indigo-600"
+              hover:text-black"
             >
 
               {sec.charAt(0).toUpperCase() + sec.slice(1)}
@@ -117,7 +137,7 @@ function Navbar() {
                   absolute -bottom-2
                   left-0 right-0
                   h-[2px]
-                  bg-indigo-600"
+                  bg-black"
                 />
               )}
 
@@ -125,10 +145,10 @@ function Navbar() {
 
           ))}
 
-          {/* ✅ STUDENT PORTAL */}
+          {/* STUDENT LOGIN */}
           <Link
             to="/student/login"
-            className="hover:text-indigo-600"
+            className="hover:text-black text-gray-700"
           >
             Student Login
           </Link>
@@ -136,7 +156,7 @@ function Navbar() {
           {/* STAFF */}
           <Link
             to="/staff-login"
-            className="hover:text-indigo-600"
+            className="hover:text-black text-gray-700"
           >
             Staff
           </Link>
@@ -146,8 +166,8 @@ function Navbar() {
             to="/register"
             className="
             px-5 py-2 rounded-lg
-            bg-indigo-600 text-white
-            hover:bg-indigo-700
+            bg-black text-white
+            hover:bg-gray-900
             transition hover:scale-105"
           >
             Register
@@ -157,7 +177,7 @@ function Navbar() {
 
         {/* MOBILE BUTTON */}
         <button
-          className="md:hidden text-3xl"
+          className="md:hidden text-3xl text-black"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           {menuOpen ? "✕" : "☰"}
@@ -176,29 +196,31 @@ function Navbar() {
             exit={{ opacity:0,y:-20 }}
             className="
             md:hidden
-            bg-white/95 backdrop-blur-xl
+            bg-white backdrop-blur-xl
             shadow-lg flex flex-col
             text-center gap-6 py-6"
           >
 
             {sections.map((sec)=>(
+
               <span
                 key={sec}
                 onClick={()=>scrollToSection(sec)}
                 className="
                 text-lg font-medium
                 text-gray-700
-                hover:text-indigo-600"
+                hover:text-black"
               >
                 {sec.charAt(0).toUpperCase()+sec.slice(1)}
               </span>
+
             ))}
 
-            {/* TEAM */}
+            {/* STUDENT LOGIN */}
             <Link
               to="/student/login"
               onClick={()=>setMenuOpen(false)}
-              className="text-lg"
+              className="text-lg text-gray-700"
             >
               Student Login
             </Link>
@@ -207,7 +229,7 @@ function Navbar() {
             <Link
               to="/staff-login"
               onClick={()=>setMenuOpen(false)}
-              className="text-lg"
+              className="text-lg text-gray-700"
             >
               Staff
             </Link>
@@ -218,7 +240,7 @@ function Navbar() {
               onClick={()=>setMenuOpen(false)}
               className="
               mx-auto px-6 py-3
-              rounded-lg bg-indigo-600
+              rounded-lg bg-black
               text-white"
             >
               Register
