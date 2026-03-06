@@ -206,7 +206,7 @@ Based on this analysis, the platform should identify customers who may be at ris
   /* ================= UI ================= */
 
   return (
-    <section id="problems" className="py-32 bg-white">
+    <section id="problems" className="py-30 bg-white mb-12">
 
       <h2 className="text-5xl font-bold text-center mb-20">
         Problem Statements
@@ -344,11 +344,14 @@ Based on this analysis, the platform should identify customers who may be at ris
               </h2>
 
               <p className="
-              text-gray-700
-              leading-relaxed
-              whitespace-pre-line">
-                {activeProblem.description}
-              </p>
+text-gray-700
+leading-relaxed
+whitespace-pre-line
+text-justify
+text-[15.5px]
+tracking-wide">
+  {activeProblem.description}
+</p>
 
             </motion.div>
 
