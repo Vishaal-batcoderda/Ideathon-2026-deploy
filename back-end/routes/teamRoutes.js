@@ -5,6 +5,8 @@ const Team = require("../models/Team");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const teamAuth = require("../middleware/teamAuth");
+const count = await Team.countDocuments();
+const teamId = count + 1;
 
 
 /* ======================================================
@@ -45,7 +47,13 @@ router.post("/register", async (req, res) => {
 
     leader.password = await bcrypt.hash(leader.password, 10);
 
+    /* ===== TEAM ID GENERATE ===== */
+
+    const count = await Team.countDocuments();
+    const teamId = count + 1;
+
     const team = new Team({
+      teamId,
       teamName,
       leader,
       members,
@@ -59,7 +67,8 @@ router.post("/register", async (req, res) => {
     await team.save();
 
     res.json({
-      message: "Registered Successfully"
+      message: "Registered Successfully",
+      teamId: teamId
     });
 
   } catch (err) {
@@ -114,7 +123,8 @@ router.post("/login", async (req, res) => {
 
     res.json({
       token,
-      teamName: team.teamName
+      teamName: team.teamName,
+      teamId: team.teamId
     });
 
   } catch (err) {
