@@ -63,10 +63,7 @@ export default function StudentLogin() {
         min-h-screen
         flex justify-center items-center
         pt-28 px-4
-        bg-gradient-to-br
-        from-indigo-50
-        via-purple-50
-        to-pink-50"
+        bg-white"
       >
 
         <motion.form
@@ -76,8 +73,7 @@ export default function StudentLogin() {
           transition={{ duration: 0.6 }}
           className="
           w-full max-w-md
-          bg-white/80
-          backdrop-blur-xl
+          bg-white
           rounded-3xl
           shadow-2xl
           border border-gray-200
@@ -87,7 +83,7 @@ export default function StudentLogin() {
           {/* TITLE */}
           <h2 className="
           text-3xl font-bold
-          text-indigo-600
+          text-black
           mb-8">
             Student Login
           </h2>
@@ -104,7 +100,7 @@ export default function StudentLogin() {
             border border-gray-300
             outline-none
             focus:ring-2
-            focus:ring-indigo-500"
+            focus:ring-black"
           />
 
           {/* PASSWORD */}
@@ -123,7 +119,7 @@ export default function StudentLogin() {
               border border-gray-300
               outline-none
               focus:ring-2
-              focus:ring-indigo-500"
+              focus:ring-black"
             />
 
             <span
@@ -145,9 +141,7 @@ export default function StudentLogin() {
             className="
             w-full py-3
             rounded-xl
-            bg-gradient-to-r
-            from-indigo-600
-            to-purple-600
+            bg-black
             text-white
             font-semibold
             transition
