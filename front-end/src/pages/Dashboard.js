@@ -58,8 +58,8 @@ function Dashboard() {
     team.status === filter;
 
   const matchDomain =
-    domainFilter === "all" ||
-    team.domain === domainFilter;
+  domainFilter === "all" ||
+  team.domain === `Domain ${domainFilter}`;
 
   return matchSearch && matchFilter && matchDomain;
 
@@ -171,8 +171,6 @@ flex flex-wrap gap-4 items-center">
             <thead className="bg-gray-200">
               <tr>
                 <th className="p-4">Team</th>
-                <th>Dept</th>
-                <th>Year</th>
                 <th>Problem Title</th>
                 <th>Abstract</th>
                 <th>Status</th>
@@ -193,8 +191,6 @@ flex flex-wrap gap-4 items-center">
                     {team.teamName}
                   </td>
 
-                  <td>{team.department}</td>
-                  <td>{team.year}</td>
                   <td className="max-w-xs truncate">
   {team.problemTitle || team.problemStatement}
 </td>
