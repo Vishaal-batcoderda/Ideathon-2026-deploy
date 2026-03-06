@@ -139,7 +139,6 @@ flex flex-wrap gap-4 items-center">
     bg-white"
   >
     <option value="all">All Domains</option>
-    <option value="all">All Domains</option>
 
 <option value="Artificial Intelligence & Data Intelligence">
 Artificial Intelligence & Data Intelligence

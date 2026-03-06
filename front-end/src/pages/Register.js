@@ -128,12 +128,6 @@ function Register() {
   setLoading(true);
 
   try {
-    console.log("REGISTER DATA:",
-      {
-        teamName: formData.teamName,
-        department: formData.department,
-        year: formData.leader.year,
-      });
     const res = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/team/register`,
       {
