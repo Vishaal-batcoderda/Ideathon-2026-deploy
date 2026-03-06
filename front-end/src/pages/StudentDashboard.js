@@ -87,7 +87,7 @@ export default function StudentDashboard() {
   <img
     src={logo}
     alt="Protothon Logo"
-    className="h-10 mx-auto sm:mx-0"
+    className="h-14 object-contain mx-auto sm:mx-0"
   />
 
   <div className="text-center sm:text-right font-semibold text-gray-700 text-sm sm:text-base">
