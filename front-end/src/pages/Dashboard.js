@@ -49,36 +49,37 @@ function Dashboard() {
 
   const filteredTeams = teams.filter(team => {
 
-  const matchSearch =
-    team.teamName
-      .toLowerCase()
-      .includes(search.toLowerCase());
+    const matchSearch =
+      team.teamName
+        .toLowerCase()
+        .includes(search.toLowerCase());
 
-  const matchFilter =
-    filter === "all" ||
-    team.status === filter;
+    const matchFilter =
+      filter === "all" ||
+      team.status === filter;
 
- const matchDomain =
-  domainFilter === "all" ||
-  team.domain === domainFilter;
+    const matchDomain =
+      domainFilter === "all" ||
+      team.domain === domainFilter;
 
-  return matchSearch && matchFilter && matchDomain;
+    return matchSearch && matchFilter && matchDomain;
 
-});
+  });
 
   return (
     <>
       <Navbar />
 
-      <div className="min-h-screen pt-28 px-10 bg-white">
+      <div className="min-h-screen pt-28 px-4 sm:px-8 lg:px-12 bg-white">
 
         {/* HEADER */}
         <div className="
-        flex flex-col md:flex-row
+        flex flex-col sm:flex-row
         justify-between items-center
-        mb-10 gap-4">
+        mb-10 gap-4
+        text-center sm:text-left">
 
-          <h1 className="text-4xl font-bold text-black">
+          <h1 className="text-3xl sm:text-4xl font-bold text-black">
             Staff Dashboard
           </h1>
 
@@ -99,77 +100,83 @@ function Dashboard() {
 
         {/* SEARCH + FILTER */}
         <div className="
-bg-gray-100
-rounded-xl
-p-6 mb-8
-flex flex-wrap gap-4 items-center">
+        bg-gray-100
+        rounded-xl
+        p-4 sm:p-6 mb-8
+        flex flex-col sm:flex-row
+        flex-wrap gap-4">
 
-  <input
-    placeholder="Search Team..."
-    value={search}
-    onChange={(e)=>setSearch(e.target.value)}
-    className="
-    p-3 rounded-lg
-    border border-gray-300
-    bg-white"
-  />
+          <input
+            placeholder="Search Team..."
+            value={search}
+            onChange={(e)=>setSearch(e.target.value)}
+            className="
+            p-3 rounded-lg
+            border border-gray-300
+            bg-white
+            w-full sm:w-auto flex-1"
+          />
 
-  {/* STATUS FILTER */}
-  <select
-    value={filter}
-    onChange={(e)=>setFilter(e.target.value)}
-    className="
-    p-3 rounded-lg
-    border border-gray-300
-    bg-white"
-  >
-    <option value="all">All Status</option>
-    <option value="Selected">Selected</option>
-    <option value="Rejected">Rejected</option>
-    <option value="Pending">Pending</option>
-  </select>
+          {/* STATUS FILTER */}
+          <select
+            value={filter}
+            onChange={(e)=>setFilter(e.target.value)}
+            className="
+            p-3 rounded-lg
+            border border-gray-300
+            bg-white
+            w-full sm:w-auto"
+          >
+            <option value="all">All Status</option>
+            <option value="Selected">Selected</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Pending">Pending</option>
+          </select>
 
-  {/* DOMAIN FILTER */}
-  <select
-    value={domainFilter}
-    onChange={(e)=>setDomainFilter(e.target.value)}
-    className="
-    p-3 rounded-lg
-    border border-gray-300
-    bg-white"
-  >
-    <option value="all">All Domains</option>
+          {/* DOMAIN FILTER */}
+          <select
+            value={domainFilter}
+            onChange={(e)=>setDomainFilter(e.target.value)}
+            className="
+            p-3 rounded-lg
+            border border-gray-300
+            bg-white
+            w-full sm:w-auto"
+          >
+            <option value="all">All Domains</option>
 
-<option value="Artificial Intelligence & Data Intelligence">
-Artificial Intelligence & Data Intelligence
-</option>
+            <option value="Artificial Intelligence & Data Intelligence">
+              Artificial Intelligence & Data Intelligence
+            </option>
 
-<option value="Multipurpose Digital Infrastructure Systems">
-Multipurpose Digital Infrastructure Systems
-</option>
+            <option value="Multipurpose Digital Infrastructure Systems">
+              Multipurpose Digital Infrastructure Systems
+            </option>
 
-<option value="Agriculture, FoodTech and Rural Development">
-Agriculture, FoodTech and Rural Development
-</option>
+            <option value="Agriculture, FoodTech and Rural Development">
+              Agriculture, FoodTech and Rural Development
+            </option>
 
-<option value="Digital Platforms and Social Innovation">
-Digital Platforms and Social Innovation
-</option>
+            <option value="Digital Platforms and Social Innovation">
+              Digital Platforms and Social Innovation
+            </option>
 
-<option value="Industry & Business Solutions">
-Industry & Business Solutions
-</option>
-  </select>
+            <option value="Industry & Business Solutions">
+              Industry & Business Solutions
+            </option>
+          </select>
 
-  <a
-    href={`${process.env.REACT_APP_API_URL}/api/team/export`}
-    className="
-    px-4 py-3 rounded-lg
-    bg-green-600 text-white">
-    Export Excel
-  </a>
+          <a
+            href={`${process.env.REACT_APP_API_URL}/api/team/export`}
+            className="
+            px-4 py-3 rounded-lg
+            bg-green-600 text-white
+            text-center
+            w-full sm:w-auto">
+            Export Excel
+          </a>
 
-</div>
+        </div>
 
 
         {/* TABLE */}
@@ -182,7 +189,7 @@ Industry & Business Solutions
           shadow-md
           overflow-x-auto">
 
-          <table className="w-full text-center">
+          <table className="w-full min-w-[700px] text-center">
 
             <thead className="bg-gray-200">
               <tr>
@@ -207,9 +214,9 @@ Industry & Business Solutions
                     {team.teamName}
                   </td>
 
-                  <td className="max-w-xs truncate">
-  {team.problemTitle || team.problemStatement}
-</td>
+                  <td className="max-w-xs truncate px-2">
+                    {team.problemTitle || team.problemStatement}
+                  </td>
 
                   <td>
                     <button
@@ -295,7 +302,7 @@ Industry & Business Solutions
               max-w-3xl w-full
               max-h-[80vh]
               overflow-y-auto
-              p-8 relative">
+              p-6 sm:p-8 relative">
 
               <button
                 onClick={()=>setSelectedAbstract(null)}
@@ -306,7 +313,8 @@ Industry & Business Solutions
               </button>
 
               <h2 className="
-              text-2xl font-bold
+              text-xl sm:text-2xl
+              font-bold
               mb-4">
                 {selectedAbstract.teamName}
               </h2>
