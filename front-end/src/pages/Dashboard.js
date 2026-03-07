@@ -193,12 +193,13 @@ function Dashboard() {
 
             <thead className="bg-gray-200">
               <tr>
-                <th className="p-4">Team</th>
-                <th>Problem Title</th>
-                <th>Abstract</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
+  <th className="p-4">Team ID</th>
+  <th>Team</th>
+  <th>Problem Title</th>
+  <th>Abstract</th>
+  <th>Status</th>
+  <th>Action</th>
+</tr>
             </thead>
 
             <tbody>
@@ -209,6 +210,10 @@ function Dashboard() {
                   key={team._id}
                   className="border-t hover:bg-gray-50"
                 >
+
+                  <td className="p-4 font-medium text-gray-600 text-center">
+  {team.teamId}
+</td>
 
                   <td className="p-4 font-semibold">
                     {team.teamName}
