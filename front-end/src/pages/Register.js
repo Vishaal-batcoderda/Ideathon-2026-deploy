@@ -395,24 +395,36 @@ function Register() {
             {/* Problem */}
 
             {selectedDomain && (
-              <div ref={problemRef}>
+              <div ref={problemRef} className="w-full">
 
-                <select
-                  name="problemTitle"
-                  onChange={handleProblemChange}
-                  className="p-3 border rounded-xl"
-                  required
-                >
+  <select
+    name="problemTitle"
+    onChange={handleProblemChange}
+    className="
+      w-full
+      p-3
+      text-sm
+      sm:text-base
+      border
+      rounded-xl
+      focus:outline-none
+      focus:ring-2
+      focus:ring-black
+    "
+    required
+  >
 
-                  <option>Select Problem</option>
+    <option value="">Select Problem</option>
 
-                  {selectedProblems.map((p, i) => (
-                    <option key={i}>{p}</option>
-                  ))}
+    {selectedProblems.map((p, i) => (
+      <option key={i} value={p}>
+        {p}
+      </option>
+    ))}
 
-                </select>
+  </select>
 
-              </div>
+</div>
             )}
 
             {/* Abstract */}
