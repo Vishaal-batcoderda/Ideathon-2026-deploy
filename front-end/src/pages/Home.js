@@ -285,7 +285,7 @@ shadow-lg"
 <motion.img
 src={step.image}
 alt=""
-className="md:w-1/2 w-[320px]"
+className="md:w-1/2 w-full  max-w-[320px]"
 initial={{ opacity: 0, x: 120 }}
 whileInView={{ opacity: 1, x: 0 }}
 viewport={{ once: true }}
