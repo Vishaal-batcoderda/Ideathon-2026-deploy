@@ -73,7 +73,7 @@ to-gray-200
 "
 >
 
-<ParticlesBackground/>
+<ParticlesBackground className="absolute inset-0 overflow-hidden"/>
 
 <div
 className="pointer-events-none absolute inset-0 opacity-[0.04]"
@@ -83,7 +83,7 @@ backgroundImage:
 }}
 />
 
-<div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center gap-14">
+<div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center gap-10 overflow-hidden">
 
 {/* IMAGE */}
 <motion.div
@@ -96,7 +96,7 @@ className="md:w-1/2 flex justify-center"
 <motion.img
 src={protothon}
 alt="Protothon"
-className="w-[280px] md:w-[520px]"
+className="w-[240px] sm:w-[280px] md:w-[520px]"
 animate={{
 y:[0,-14,0],
 rotate:[0,1.5,0,-1.5,0]
