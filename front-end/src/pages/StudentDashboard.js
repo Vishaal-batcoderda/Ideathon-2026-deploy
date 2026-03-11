@@ -19,7 +19,7 @@ export default function StudentDashboard() {
 };
 
   /* ================= DEADLINE LOGIC ================= */
-  const deadline = new Date("2026-03-10T23:59:59");
+  const deadline = new Date("2026-03-18T23:59:59");
   const isEditable = new Date() <= deadline;
 
   /* ================= FETCH TEAM ================= */
