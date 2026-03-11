@@ -89,9 +89,17 @@ function Dashboard() {
               navigate("/staff-login");
             }}
             className="
-            px-5 py-2 rounded-lg
-            bg-red-500 text-white
-            hover:opacity-90 transition">
+            px-6 py-2
+            rounded-full
+            bg-red-500
+            text-white
+            font-medium
+            shadow-sm
+            hover:bg-red-600
+            hover:shadow-md
+            active:scale-95
+            transition-all duration-200
+            ">
             Logout
           </button>
 
@@ -227,10 +235,17 @@ function Dashboard() {
                     <button
                       onClick={()=>setSelectedAbstract(team)}
                       className="
-                      px-3 py-1
-                      bg-black
+                      px-4 py-2
+                      rounded-full
+                      bg-gray-900
                       text-white
-                      rounded">
+                      text-sm font-medium
+                      shadow-sm
+                      hover:bg-black
+                      hover:shadow-md
+                      active:scale-95
+                      transition-all duration-200
+                      ">
                       View
                     </button>
                   </td>
@@ -248,8 +263,9 @@ function Dashboard() {
 
                   <td className="space-x-2">
 
-                    <button
+                    <motion.button
                       onClick={()=>updateStatus(team._id,"Selected")}
+                      whileTap={{ scale: 0.92 }}
                       className="
                       px-4 py-2
                       rounded-full
@@ -263,15 +279,22 @@ function Dashboard() {
                       transition-all duration-200
                     ">
                       Select
-                    </button>
+                    </motion.button>
 
                     <button
                       onClick={()=>updateStatus(team._id,"Rejected")}
-                      className="
-                      px-3 py-1
+                     className="
+                      px-4 py-2
+                      rounded-full
                       bg-red-500
                       text-white
-                      rounded">
+                      text-sm font-medium
+                      shadow-sm
+                      hover:shadow-md
+                      hover:-translate-y-[1px]
+                      active:scale-95
+                      transition-all duration-200
+                      ">
                       Reject
                     </button>
 
