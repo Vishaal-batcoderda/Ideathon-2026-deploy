@@ -375,6 +375,9 @@ Use your college email
     setMembers(updated);
   }}
 />
+    <p className="text-sm text-gray-500 -mt-4">
+  Use your college email
+</p>
 
 <select
   className="w-full p-3 border rounded-xl"
