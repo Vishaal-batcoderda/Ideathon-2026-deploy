@@ -375,7 +375,7 @@ Use your college email
     setMembers(updated);
   }}
 />
-    <p className="text-sm text-gray-500 -mt-4">
+    <p className="text-sm text-gray-500 -mt-5">
   Use your college email
 </p>
 
