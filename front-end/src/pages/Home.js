@@ -64,7 +64,7 @@ id="home"
 className="
 min-h-[calc(100vh-70px)]
 flex items-center
-overflow-hidden
+overflow-x-hidden
 px-6 pt-24
 bg-gradient-to-br
 from-white
@@ -96,7 +96,7 @@ className="md:w-1/2 flex justify-center"
 <motion.img
 src={protothon}
 alt="Protothon"
-className="w-[240px] sm:w-[280px] md:w-[520px]"
+className="w-[240px] sm:w-[280px] md:w-[520px] max-w-full"
 animate={{
 y:[0,-14,0],
 rotate:[0,1.5,0,-1.5,0]
