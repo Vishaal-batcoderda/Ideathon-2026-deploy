@@ -62,7 +62,6 @@ export default function Home() {
 <section
 id="home"
 className="
-relative z-0
 min-h-[calc(100vh-70px)]
 flex items-center
 overflow-hidden
@@ -74,7 +73,7 @@ to-gray-200
 "
 >
 
-<ParticlesBackground className="absolute inset-0 z-0"/>
+<ParticlesBackground/>
 
 <div
 className="pointer-events-none absolute inset-0 opacity-[0.04]"
@@ -84,7 +83,7 @@ backgroundImage:
 }}
 />
 
-<div className="relative z-10 max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center gap-14">
+<div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center gap-14">
 
 {/* IMAGE */}
 <motion.div
