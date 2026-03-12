@@ -5,6 +5,7 @@ const Team = require("../models/Team");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const teamAuth = require("../middleware/teamAuth");
+const sendEmail = require("../utils/sendEmail");
 
 
 /* ======================================================
@@ -64,6 +65,54 @@ router.post("/register", async (req, res) => {
     });
 
     await team.save();
+
+    const emails = [
+  leader.email,
+  ...members.filter(m => m.email).map(m => m.email)
+];
+
+    try {
+
+  await sendEmail(
+    emails,
+    "Protothon 2026 | Registration Confirmed",
+    `
+    <h2>Protothon 2026</h2>
+
+    <p>Hello Team ${teamName},</p>
+
+    <p>Your registration for Protothon 2026 has been successfully completed.</p>
+
+    <p><b>Team ID:</b> ${teamId}</p>
+    <p><b>Domain:</b> ${domain}</p>
+    <p><b>Problem Statement:</b> ${problemTitle}</p>
+
+    <p>
+    Login here:
+    https://protothon-2026.vercel.app/#home
+    </p>
+
+    <p>
+    Thank you for registering for Protothon 2026.
+    </p>
+
+    <p>
+    Best Regards<br/>
+    Protothon 2026 Organizing Team<br/>
+    Saranathan College of Engineering
+    </p>
+
+    <p>
+    For any queries: it264061@saranathan.ac.in
+    </p>
+    `
+  );
+
+} catch(err) {
+
+  console.log("Email failed:", err);
+
+}
 
     res.json({
       message: "Registered Successfully",
