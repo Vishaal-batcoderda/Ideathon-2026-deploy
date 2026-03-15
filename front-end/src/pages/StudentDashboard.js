@@ -14,15 +14,13 @@ export default function StudentDashboard() {
   const navigate = useNavigate();
 
   const logout = () => {
-  localStorage.removeItem("teamToken");
-  navigate("/student/login");
-};
+    localStorage.removeItem("teamToken");
+    navigate("/student/login");
+  };
 
-  /* ================= DEADLINE LOGIC ================= */
   const deadline = new Date("2026-03-18T23:59:59");
   const isEditable = new Date() <= deadline;
 
-  /* ================= FETCH TEAM ================= */
   useEffect(() => {
 
     const token = localStorage.getItem("teamToken");
@@ -51,9 +49,6 @@ export default function StudentDashboard() {
 
   }, [navigate]);
 
-
-
-  /* ================= UPDATE ABSTRACT ================= */
   const updateAbstract = async () => {
 
     try {
@@ -78,98 +73,78 @@ export default function StudentDashboard() {
   };
 
   if (!team)
-    return <h1 className="pt-32 text-center">Loading...</h1>;
+    return <h1 className="pt-20 text-center">Loading...</h1>;
 
   return (
     <>
+      
+      {/* HEADER */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center px-4 sm:px-6 py-4 shadow bg-white gap-2">
 
-  <img
-    src={logo}
-    alt="Protothon Logo"
-    className="h-14 object-contain mx-auto sm:mx-0"
-  />
+        <img
+          src={logo}
+          alt="Protothon Logo"
+          className="h-12 sm:h-14 object-contain mx-auto sm:mx-0"
+        />
 
-  <div className="text-center sm:text-right font-semibold text-gray-700 text-sm sm:text-base">
-    Team ID : {team.teamId} | {team.leader.name} (Logged In)
-  </div>
+        <div className="text-center sm:text-right font-semibold text-gray-700 text-sm sm:text-base">
+          Team ID : {team.teamId} | {team.leader.name} (Logged In)
+        </div>
 
-</div>
+      </div>
 
-    <div className="
-mb-8
-p-6
-rounded-xl
-bg-green-50
-border border-green-200
-flex flex-col md:flex-row
-items-center
-justify-between
-gap-4">
+      {/* WHATSAPP BOX */}
+      <div className="mx-4 sm:mx-6 mt-6 mb-8 p-6 rounded-xl bg-green-50 border border-green-200 flex flex-col md:flex-row items-center justify-between gap-4">
 
-<div>
+        <div>
+          <h3 className="text-lg font-semibold text-green-700">
+            Stay Updated!
+          </h3>
 
-<h3 className="text-lg font-semibold text-green-700">
-Stay Updated!
-</h3>
+          <p className="text-gray-600 text-sm">
+            Join the Protothon WhatsApp community
+            to receive important announcements and updates.
+          </p>
+        </div>
 
-<p className="text-gray-600 text-sm">
-Join the Protothon WhatsApp community
-to receive important announcements and updates.
-</p>
+        <a
+          href="https://chat.whatsapp.com/Hw7FG3ofObXEjQeUDao1md"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-6 py-2 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition"
+        >
+          Join WhatsApp
+        </a>
 
-</div>
+      </div>
 
-<a
-href="https://chat.whatsapp.com/Hw7FG3ofObXEjQeUDao1md"
-target="_blank"
-rel="noopener noreferrer"
-className="
-px-6 py-2
-bg-green-500
-text-white
-rounded-lg
-font-semibold
-hover:bg-green-600
-transition"
->
-
-Join WhatsApp
-
-</a>
-
-</div>
-
-      <div className="min-h-screen pt-32 px-6 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+      {/* MAIN CONTAINER */}
+      <div className="min-h-screen pt-10 sm:pt-16 px-4 sm:px-6 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
 
         <motion.div
           initial={{ opacity:0, y:30 }}
           animate={{ opacity:1, y:0 }}
-          className="max-w-5xl mx-auto bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-10"
+          className="max-w-5xl mx-auto bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-6 sm:p-10"
         >
 
-         <div className="flex justify-between items-center mb-8">
+          {/* TITLE */}
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
 
-  <h1 className="text-3xl font-bold text-indigo-600">
-    Student Dashboard
-  </h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-indigo-600">
+              Student Dashboard
+            </h1>
 
-  <button
-    onClick={logout}
-    className="
-    px-5 py-2
-    bg-red-500
-    text-white
-    rounded-lg
-    hover:scale-105
-    transition">
-    Logout
-  </button>
+            <button
+              onClick={logout}
+              className="px-5 py-2 bg-red-500 text-white rounded-lg hover:scale-105 transition">
+              Logout
+            </button>
 
-</div>
+          </div>
 
-          {/* ================= TEAM DETAILS TABLE ================= */}
-          <table className="w-full border border-gray-300 mb-8">
+          {/* TEAM DETAILS */}
+          <div className="overflow-x-auto">
+          <table className="w-full border border-gray-300 mb-8 text-sm sm:text-base">
 
             <tbody>
 
@@ -207,13 +182,15 @@ Join WhatsApp
             </tbody>
 
           </table>
+          </div>
 
-          {/* ================= TEAM MEMBERS TABLE ================= */}
+          {/* MEMBERS */}
           <h2 className="text-xl font-semibold mb-4">
             Team Members
           </h2>
 
-          <table className="w-full border border-gray-300 mb-8 text-center">
+          <div className="overflow-x-auto">
+          <table className="w-full border border-gray-300 mb-8 text-center text-sm sm:text-base">
 
             <thead className="bg-indigo-600 text-white">
               <tr>
@@ -236,19 +213,23 @@ Join WhatsApp
             </tbody>
 
           </table>
+          </div>
 
-          {/* ================= DOMAIN & PROBLEM ================= */}
+          {/* DOMAIN */}
           <div className="mb-8">
+
             <h2 className="text-xl font-semibold mb-2">Domain</h2>
-            <p>{team.domain}</p>
+            <p className="text-gray-700">{team.domain}</p>
 
             <h2 className="text-xl font-semibold mt-6 mb-2">
               Problem Statement
             </h2>
-            <p>{team.problemTitle}</p>
+
+            <p className="text-gray-700">{team.problemTitle}</p>
+
           </div>
 
-          {/* ================= ABSTRACT ================= */}
+          {/* ABSTRACT */}
           <div>
 
             <h2 className="text-xl font-semibold mb-3">
@@ -263,7 +244,8 @@ Join WhatsApp
                   className="w-full h-40 p-3 border rounded-xl"
                 />
 
-                <div className="mt-4 space-x-3">
+                <div className="mt-4 flex gap-3 flex-wrap">
+
                   <button
                     onClick={updateAbstract}
                     className="px-5 py-2 bg-green-600 text-white rounded-lg">
@@ -275,6 +257,7 @@ Join WhatsApp
                     className="px-5 py-2 bg-gray-400 text-white rounded-lg">
                     Cancel
                   </button>
+
                 </div>
               </>
             ) : (
@@ -294,6 +277,7 @@ Join WhatsApp
                     🔒 Editing closed after March 10
                   </div>
                 )}
+
               </>
             )}
 
