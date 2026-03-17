@@ -14,13 +14,13 @@ const sendEmail = require("../utils/sendEmail");
 
 router.post("/register", async (req, res) => {
 
-   // const deadline = new Date("2026-03-19T00:00:00");
+   const deadline = new Date("2026-03-17T00:00:00");
 
-   // if(new Date() > deadline) {
-   //    return res.status(403).json({
-   //       message:"Registration closed"
-   //    });
-   // }
+   if(new Date() > deadline) {
+      return res.status(403).json({
+         message:"Registration closed"
+      });
+   }
       
   try {
 
