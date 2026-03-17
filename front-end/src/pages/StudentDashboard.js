@@ -303,7 +303,7 @@ return (
               value={newAbstract}
               onChange={(e)=>setNewAbstract(e.target.value)}
               className="w-full h-40 p-3 border rounded-xl"
-              maxLength={500}
+              maxLength={1000}
             />
 
             <div className="mt-4 flex gap-3 flex-wrap">
