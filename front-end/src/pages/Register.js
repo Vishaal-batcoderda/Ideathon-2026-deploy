@@ -8,6 +8,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
+const DEADLINE = new Date("2026-03-18T23:59:59+05:30");
+
 function Register() {
 
   const navigate = useNavigate();
@@ -140,6 +142,10 @@ function Register() {
 
   const handleSubmit = async (e) => {
   e.preventDefault();
+    if (new Date() > DEADLINE) {
+  toast.error("Registration closed");
+  return;
+}
   setLoading(true);
 
     const emailRegex = /^it\d+@saranathan\.ac\.in$/i;
@@ -249,6 +255,9 @@ function Register() {
           <h2 className="text-4xl font-bold text-center text-black mb-10">
             Protothon 2026 Registration
           </h2>
+
+            <CircularTimer deadline={DEADLINE} />
+
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
 
@@ -521,12 +530,20 @@ Use your college email
             )}
 
             <button
-              type="submit"
-              disabled={loading}
-              className="bg-black text-white py-3 rounded-xl"
-            >
-              {loading ? "Registering..." : "Submit Registration"}
-            </button>
+  type="submit"
+  disabled={loading || new Date() > DEADLINE}
+  className={`py-3 rounded-xl ${
+    new Date() > DEADLINE
+      ? "bg-gray-400 cursor-not-allowed"
+      : "bg-black text-white"
+  }`}
+>
+  {new Date() > DEADLINE
+    ? "Registration Closed"
+    : loading
+    ? "Registering..."
+    : "Submit Registration"}
+</button>
 
           </form>
 
@@ -584,6 +601,102 @@ function Input({ name, type = "text", placeholder, onChange }) {
     />
   );
 
+}
+
+function CircularTimer({ deadline }) {
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [isUrgent, setIsUrgent] = useState(false);
+
+  const startTime = new Date("2026-03-18T00:00:00+05:30");
+  const totalTime = Math.max(deadline - startTime, 1);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      const diff = deadline - now;
+
+      if (diff <= 0) {
+        setTimeLeft(0);
+        clearInterval(interval);
+      } else {
+        setTimeLeft(diff);
+
+        if (diff <= 10 * 60 * 1000) {
+          setIsUrgent(true); // 🔥 last 10 mins
+        }
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [deadline]);
+
+  const radius = 60;
+  const circumference = 2 * Math.PI * radius;
+
+  const progress = Math.min(
+  Math.max(timeLeft / totalTime, 0),
+  1
+);
+  const offset = circumference * (1 - progress);
+
+  const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+  const mins = Math.floor((timeLeft / (1000 * 60)) % 60);
+  const secs = Math.floor((timeLeft / 1000) % 60);
+
+  return (
+    <div className="flex justify-center mb-6">
+      <div className="relative">
+
+        <svg width="160" height="160">
+
+          {/* background */}
+          <circle
+            cx="80"
+            cy="80"
+            r={radius}
+            stroke="#e5e7eb"
+            strokeWidth="10"
+            fill="none"
+          />
+
+          {/* progress */}
+          <circle
+            cx="80"
+            cy="80"
+            r={radius}
+            stroke={isUrgent ? "#ef4444" : "#000"}
+            strokeWidth="10"
+            fill="none"
+            strokeDasharray={circumference}
+            strokeDashoffset={offset}
+            strokeLinecap="round"
+            transform="rotate(-90 80 80)"
+            className={`transition-all duration-1000 ${
+              isUrgent ? "animate-pulse" : ""
+            }`}
+          />
+
+        </svg>
+
+        {/* center text */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          {timeLeft > 0 ? (
+            <>
+              <p className="text-lg font-bold">
+                {hours}h {mins}m
+              </p>
+              <p className="text-sm text-gray-500">{secs}s</p>
+            </>
+          ) : (
+            <p className="text-red-600 font-bold text-sm">
+              Closed 
+            </p>
+          )}
+        </div>
+
+      </div>
+    </div>
+  );
 }
 
 export default Register;
