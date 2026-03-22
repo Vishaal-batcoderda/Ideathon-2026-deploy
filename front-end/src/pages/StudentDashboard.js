@@ -207,7 +207,7 @@ return (
 
             <tr className="border">
               <td className="p-3 font-semibold bg-gray-100">Status</td>
-              <td className="p-3">Pending</td>
+              <td className="p-3">{team.status}</td>
             </tr>
 
           </tbody>
